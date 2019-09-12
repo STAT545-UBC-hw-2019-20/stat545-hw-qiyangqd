@@ -5,9 +5,6 @@ __Will it be bold?__
 
 What if oneday my words become quotes?
 
-> I’ve always been more interested
-> in the future than in the past.
-
 As Grace Hopper said:
 > I’ve always been more interested
 > in the future than in the past.
