@@ -3,9 +3,14 @@
 _Will it be italic?_
 __Will it be bold?__
 
-What if my words someday becomes quotes?
->Life is a bunch of flowers.
->Sorry, I mean, a bundle of flowers.
+What if oneday my words become quotes?
+
+> I’ve always been more interested
+> in the future than in the past.
+
+As Grace Hopper said:
+> I’ve always been more interested
+> in the future than in the past.
 
 # <h3> An unordered list
 * Checklist for morning
