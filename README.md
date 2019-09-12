@@ -7,7 +7,7 @@ Hi! This is Qi Yang's homework repository of the course STAT 545A.
 This repository contains my assignments. 
 
 ## :three: Who are you?
-My name is Qi Yang, and I am a ~~marine virus~~.
+My name is Qi Yang, and I am a <del>marine virus</del>.
 first-year PhD student in Oceanography. I will be studying marine  and <del>tags</del>
 supported
 - [x] @mentions, #refs, [links](),
