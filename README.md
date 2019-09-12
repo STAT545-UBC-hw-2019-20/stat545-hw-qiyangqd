@@ -1,7 +1,7 @@
 # Homework Repository:bookmark: 
 
 ## What is this?
-Hi! This is Qi Yang's homework repository of the course STAT 545A.
+Hi! This is Qi Yang's homework repository for the course STAT 545A.
 
 ## What is this for?
 This repository is used to store my assignments of STAT 545A. There will be five assignments in total, each of which will be put in its own folder. Due dates are as follows:
