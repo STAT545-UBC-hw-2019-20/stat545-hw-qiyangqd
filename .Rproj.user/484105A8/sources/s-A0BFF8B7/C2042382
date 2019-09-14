@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1568498193195.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C2042382",
+    "lastKnownWriteTime" : 1568498751,
+    "last_content_update" : 1568498751542,
+    "path" : "C:/Program Files/stat545-hw-qiyangqd/hw1/hw01_gapminder_slides.Rmd",
+    "project_path" : "hw1/hw01_gapminder_slides.Rmd",
+    "properties" : {
+        "cursorPosition" : "34,7",
+        "scrollLine" : "20",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
