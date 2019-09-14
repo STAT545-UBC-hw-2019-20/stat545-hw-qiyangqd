@@ -7,13 +7,13 @@
     "folds" : "",
     "hash" : "0",
     "id" : "C2042382",
-    "lastKnownWriteTime" : 1568498751,
-    "last_content_update" : 1568498751542,
+    "lastKnownWriteTime" : 1568501889,
+    "last_content_update" : 1568501889277,
     "path" : "C:/Program Files/stat545-hw-qiyangqd/hw1/hw01_gapminder_slides.Rmd",
     "project_path" : "hw1/hw01_gapminder_slides.Rmd",
     "properties" : {
-        "cursorPosition" : "34,7",
-        "scrollLine" : "20",
+        "cursorPosition" : "5,3",
+        "scrollLine" : "0",
         "tempName" : "Untitled1"
     },
     "read_only" : false,

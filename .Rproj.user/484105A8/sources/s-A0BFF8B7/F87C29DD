@@ -1,24 +1,25 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1568496922207.000,
+    "created" : 1568501287488.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "0",
-    "id" : "712B1F96",
-    "lastKnownWriteTime" : 1568309887,
-    "last_content_update" : 1568309887,
-    "path" : "C:/Program Files/STAT545-participation/weeks_1_and_2/rmd_exploration.Rmd",
+    "id" : "F87C29DD",
+    "lastKnownWriteTime" : 1568501124,
+    "last_content_update" : 1568501124,
+    "path" : "C:/Users/氧气/Desktop/others.Rmd",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "14,39",
-        "scrollLine" : "0"
+        "cursorPosition" : "23,15",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 2,
+    "relative_order" : 5,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_markdown"

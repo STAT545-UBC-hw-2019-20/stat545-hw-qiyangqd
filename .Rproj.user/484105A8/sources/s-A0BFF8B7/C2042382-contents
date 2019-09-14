@@ -1,61 +1,57 @@
 ---
-title: "hw01_gapminder_slides"
+title: "Exploring Gapminder"
 author: "Qi Yang"
-date: "2019/9/14"
+date: "2019/09/14"
 output: ioslides_presentation
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-# Exploring Gapminder
 ```{r,echo = FALSE, warning = FALSE}
 library(gapminder)
 library(tibble)
 ```
-## An overview of gapminder
+## An overview of gapminder {.smaller}
+- **A brief description of gapminder**
 ```{r,echo = FALSE, warning = FALSE}
-summary(gapminder)
+str(gapminder)
 ```
-## An overview of gapminder
-- How many rows does gapminder have?
+- **How many *rows* does it have?**
 ```{r,echo = FALSE, warning = FALSE}
 nrow(gapminder)
 ```
-- How many columns does gapminder have?
+- **How many *columns* does it have?**
 ```{r,echo = FALSE, warning = FALSE}
 ncol(gapminder)
 ```
-- What variables does gapminder have?
+- **What *variables* does it have?**
 ```{r,echo = FALSE, warning = FALSE}
 names(gapminder)
 ```
 ## Maximum, minimum, mean, range
-- What are the maximum, minimum, and mean values of life expectation of all years and of all countries?
+- **What are the *maximum*, *minimum*, and *mean* values of life expectation of all years and of all countries?**
 ```{r,echo = FALSE, warning = FALSE}
 summary(gapminder$lifeExp)
 ```
-- What is the time range of gapminder?
+- **What is the time *range* of gapminder?**
 ```{r,echo = FALSE, warning = FALSE}
 range(gapminder$year)
 ```
-## Extracting based on certain criteria 
-- What if we want to view all records about Afghanistan?
+## Extraction based on certain criteria 
+- **What if we want to view all records about *Afghanistan*?**
 ```{r, echo = FALSE, warning = FALSE}
 gapminder[gapminder$country == "Afghanistan", ]
 ```
-## Extracting specific information
-- Which country has the highest GDP per capita in 1972?
+## Extraction of specific information
+- **Which country has the highest GDP per capita in 1972?**
 ```{r, echo = FALSE, warning = FALSE}
 gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gapminder$year == "1972")]))]
 ```
-- When did Afghanistan have the lowest GDP?
+- **When did Afghanistan have the lowest GDP?**
 ```{r, echo = FALSE, warning = FALSE}
 gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapminder$country == "Afghanistan")]))]
 ```
 ## Graphic  
-- Population changes of all countries over time  
+- **Population changes of all countries over time  **
 ```{r, echo = FALSE, warning = FALSE}
 plot(pop ~ year, gapminder)
 ```
+
+# Thanks for watching
