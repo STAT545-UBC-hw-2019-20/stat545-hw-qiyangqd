@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1568494118760.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D592E453",
+    "lastKnownWriteTime" : 1568497057,
+    "last_content_update" : 1568497057437,
+    "path" : "C:/Program Files/stat545-hw-qiyangqd/hw1/hw01_gapminder.Rmd",
+    "project_path" : "hw1/hw01_gapminder.Rmd",
+    "properties" : {
+        "cursorPosition" : "8,19",
+        "last_setup_crc32" : "",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
