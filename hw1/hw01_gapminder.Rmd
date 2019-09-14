@@ -1,0 +1,57 @@
+---
+title: "hw01_gapminder"
+author: "Qi Yang"
+date: "2019/9/13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Exploring Gapminder
+```{r,echo = FALSE}
+library(gapminder)
+```
+1. An **overview** of Gapminder.
+```{r,echo = FALSE}
+str(gapminder)
+```
+2. What **variables** does Gapminder have?
+```{r,echo = FALSE}
+names(gapminder)
+```
+3. What is the **maximum**, **minimum**, or **mean** value of a variable?  
+- Take *population* of all years and of all countries as an example:  
+Max: `r max(gapminder$pop)`.   Min: `r min(gapminder$pop)`.   Mean: `r mean(gapminder$pop)`.  
+- We can also generate these values at one time. Take *life expectation* of all years and of all countries as an example: 
+```{r,echo = FALSE}
+summary(gapminder$pop)
+```
+4. What if we want to know a specific time and country with a certain value (GDP, life expectation, population)?
+- The highest GDP per capita in 1972:
+```{r, echo = FALSE}
+max(gapminder$gdpPercap[which(gapminder$year == "1972")])
+```
+- Which country has the highest GDP per capita in 1972?
+```{r, echo = FALSE}
+gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gapminder$year == "1972")]))]
+```
+- The lowest GDP per capita of China:
+```{r, echo = FALSE}
+min(gapminder$gdpPercap[which(gapminder$country == "China")])
+```
+- When did China have the lowest GDP?
+```{r, echo = FALSE}
+gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapminder$country == "China")]))]
+```
+- If we are interested in a value, we can also point out the year and country of the value. Like this:  
+The exact GDP per capita of China in 1972:
+```{r, echo = FALSE}
+gapminder$gdpPercap[which(gapminder$country == "China" & gapminder$year == "1972")]
+```
+
+
+
+
+
+
