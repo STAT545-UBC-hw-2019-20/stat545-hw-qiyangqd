@@ -9,7 +9,8 @@ This repository is used to store my assignments of STAT 545A. There will be five
 - 2019-09-24 (Assignment 02)
 - 2019-10-01 (Assignment 03)
 - 2019-10-08 (Assignment 04)
-- 2019-10-18 (Assignment 05)
+- 2019-10-18 (Assignment 05)  
+Some additional files are generated when I push my commits to Github. Please igore them and find my homework in its own folder.
 
 ## Who am I?
 My name is **Qi Yang**, and I am a <del>marine virus</del>. :smiling_imp:
