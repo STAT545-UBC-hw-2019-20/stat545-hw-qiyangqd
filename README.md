@@ -4,7 +4,7 @@
 Hi! This is Qi Yang's homework repository for the course STAT 545A.
 
 ## What is this for?
-This repository is used to store my assignments of STAT 545A. There will be five assignments in total, each of which will be put in its own folder. Due dates are as follows:
+This repository is used to store my assignments of STAT 545A. There will be five assignments in total, each of which will be put in its own folder. For instance, **Assignment 01** is put in a folder called **hw01**. Due dates are as follows:
 - 2019-09-17 (Assignment 01)
 - 2019-09-24 (Assignment 02)
 - 2019-10-01 (Assignment 03)
