@@ -28,8 +28,8 @@ ncol(gapminder)
 ```{r,echo = FALSE}
 names(gapminder)
 ```
-2. maximum, minimum, mean, range
-- What are the maximum, minimum, and mean of *life expectation* of all years and of all countries?
+2. Maximum, minimum, mean, range
+- What are the maximum, minimum, and mean values of life expectation of all years and of all countries?
 ```{r,echo = FALSE}
 summary(gapminder$lifeExp)
 ```
@@ -37,7 +37,12 @@ summary(gapminder$lifeExp)
 ```{r,echo = FALSE}
 range(gapminder$year)
 ```
-3. Find out specific information
+3. Extracting information based on certain criteria 
+- What if we want to view all records about Afghanistan?
+```{r, echo = FALSE}
+gapminder[gapminder$country == "Afghanistan", ]
+```
+4. Finding out specific information
 - Which country has the highest GDP per capita in 1972?
 ```{r, echo = FALSE}
 gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gapminder$year == "1972")]))]
@@ -46,13 +51,9 @@ gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gap
 ```{r, echo = FALSE}
 gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapminder$country == "Afghanistan")]))]
 ```
-4. Extract information based on certain criteria 
-- What if we want to view all records about Afghanistan?
-```{r, echo = FALSE}
-gapminder[gapminder$country == "Afghanistan", ]
-```
-5. Basic graphic  
+5. Graphic  
 - Population changes of all countries over time  
 ```{r, echo = FALSE}
 plot(pop ~ year, gapminder)
 ```
+
