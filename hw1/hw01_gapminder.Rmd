@@ -1,16 +1,14 @@
 ---
 title: "hw01_gapminder"
 author: "Qi Yang"
-date: "2019/09/13"
+date: "2019/9/14"
 output: 
-  html_document:
-    keep_md: true
-    toc: true
-    toc_float: true
-    number_sections: true
-    theme: cerulean
+        github_document:
+        keep_md: true
+        toc: true
+        theme: cerulean
 ---
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 # Exploring Gapminder
