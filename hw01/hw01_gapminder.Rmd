@@ -1,0 +1,67 @@
+---
+title: "hw01_gapminder"
+author: "Qi Yang"
+date: "2019/9/14"
+output: 
+        github_document:
+        keep_md: true
+        toc: true
+        theme: cerulean
+---
+```{r setup, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Exploring Gapminder
+```{r,echo = FALSE, warning = FALSE}
+library(gapminder)
+library(tibble)
+```
+## An overview of gapminder
+Let's take a look at some basic information about gapminder.
+```{r,echo = FALSE, warning = FALSE}
+summary(gapminder)
+```
+- How many **rows** does gapminder have?
+```{r,echo = FALSE, warning = FALSE}
+nrow(gapminder)
+```
+- How many **columns** does gapminder have?
+```{r,echo = FALSE, warning = FALSE}
+ncol(gapminder)
+```
+- What **variables* does gapminder have?
+```{r,echo = FALSE, warning = FALSE}
+names(gapminder)
+```
+## Maximum, minimum, mean, range
+Let's dig deeper into gapminder by finding out the maximum, minimum, mean and range of certain variables. 
+- Take **life expectation** of all years and of all countries as an example:
+```{r,echo = FALSE, warning = FALSE}
+summary(gapminder$lifeExp)
+```
+- What is the **time** range of gapminder?
+```{r,echo = FALSE, warning = FALSE}
+range(gapminder$year)
+```
+## Extraction based on certain criteria 
+We can set up a "keyword" to learn everything about it, for instance, a country.  
+- What if we want to view all records about **Afghanistan**?
+```{r, echo = FALSE, warning = FALSE}
+gapminder[gapminder$country == "Afghanistan", ]
+```
+## Extraction of specific information
+We can also view a single piece of information that we want. 
+- Which country has **the highest GDP per capita** in **1972**?
+```{r, echo = FALSE, warning = FALSE}
+gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gapminder$year == "1972")]))]
+```
+- When did **Afghanistan** have **the lowest GDP**?
+```{r, echo = FALSE, warning = FALSE}
+gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapminder$country == "Afghanistan")]))]
+```
+## Graphic  
+If we want to learn something more directly, we can use graphics based on gapminder. 
+- **Population** changes of all countries over time:  
+```{r, echo = FALSE, warning = FALSE}
+plot(pop ~ year, gapminder)
+```
