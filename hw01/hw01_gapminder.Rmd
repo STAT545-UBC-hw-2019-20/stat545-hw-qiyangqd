@@ -1,5 +1,5 @@
 ---
-title: "hw01_gapminder"
+title: "Exploring Gapminder"
 author: "Qi Yang"
 date: "2019/9/14"
 output: 
@@ -11,7 +11,6 @@ output:
 ```{r setup, include=FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-# Exploring Gapminder
 ```{r,echo = FALSE, warning = FALSE}
 library(gapminder)
 library(tibble)

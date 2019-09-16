@@ -1,9 +1,7 @@
-hw01\_gapminder
+Exploring Gapminder
 ================
 Qi Yang
 2019/9/14
-
-# Exploring Gapminder
 
 ## An overview of gapminder
 
