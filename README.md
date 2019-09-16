@@ -11,10 +11,10 @@ This repository is used to store my assignments of STAT 545A. There will be five
 - 2019-10-08 (Assignment 04)
 - 2019-10-18 (Assignment 05)  
 
-Some additional files are generated when I push my commits to Github. Please igore them and find my homework in its own folder. :smile:
+:smile: Some additional files are generated when I push my commits to Github. Please igore them and find my homework in its own folder.
 
 ## Who am I?
-My name is **Qi Yang**, and I am a <del>marine virus</del>. :smiling_imp:
+:smiling_imp: My name is **Qi Yang**, and I am a <del>marine virus</del>.
 
 Sorry, I am actually a first-year PhD student in Oceanography, focusing on **marine viruses** and their ecological roles in the oceans. 
 Below are some marine viruses under a microscope. Super cool, aren't they?
