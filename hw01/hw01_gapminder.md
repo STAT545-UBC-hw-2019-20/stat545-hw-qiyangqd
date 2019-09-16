@@ -36,7 +36,7 @@ Let’s take a look at some basic information about gapminder.
 
     ## [1] 6
 
-  - What \*\*variables\* does gapminder have?
+  - What **variables** does gapminder have?
 
 <!-- end list -->
 
@@ -45,8 +45,9 @@ Let’s take a look at some basic information about gapminder.
 ## Maximum, minimum, mean, range
 
 Let’s dig deeper into gapminder by finding out the maximum, minimum,
-mean and range of certain variables. - Take **life expectation** of all
-years and of all countries as an example:
+mean and range of certain variables.  
+\- Take **life expectation** of all years and of all countries as an
+example:
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     ##   23.60   48.20   60.71   59.47   70.85   82.60
@@ -81,8 +82,8 @@ country.
 
 ## Extraction of specific information
 
-We can also view a single piece of information that we want. - Which
-country has **the highest GDP per capita** in **1972**?
+We can also view a single piece of information that we want.  
+\- Which country has **the highest GDP per capita** in **1972**?
 
     ## [1] Kuwait
     ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
@@ -96,5 +97,6 @@ country has **the highest GDP per capita** in **1972**?
 ## Graphic
 
 If we want to learn something more directly, we can use graphics based
-on gapminder. - **Population** changes of all countries over time:  
+on gapminder.  
+\- **Population** changes of all countries over time:  
 ![](hw01_gapminder_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
