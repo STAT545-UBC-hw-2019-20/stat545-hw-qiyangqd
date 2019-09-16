@@ -34,6 +34,7 @@ names(gapminder)
 ```
 ## Maximum, minimum, mean, range
 Let's dig deeper into gapminder by finding out the maximum, minimum, mean and range of certain variables.  
+
 - Take **life expectation** of all years and of all countries as an example:
 ```{r,echo = FALSE, warning = FALSE}
 summary(gapminder$lifeExp)
@@ -44,12 +45,14 @@ range(gapminder$year)
 ```
 ## Extraction based on certain criteria 
 We can set up a "keyword" to learn everything about it, for instance, a country.    
+
 - What if we want to view all records about **Afghanistan**?
 ```{r, echo = FALSE, warning = FALSE}
 gapminder[gapminder$country == "Afghanistan", ]
 ```
 ## Extraction of specific information
-We can also view a single piece of information that we want.   
+We can also view a single piece of information that we want. 
+
 - Which country has **the highest GDP per capita** in **1972**?
 ```{r, echo = FALSE, warning = FALSE}
 gapminder$country[which(gapminder$gdpPercap == max(gapminder$gdpPercap[which(gapminder$year == "1972")]))]
@@ -60,6 +63,7 @@ gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapmin
 ```
 ## Graphic  
 If we want to learn something more directly, we can use graphics based on gapminder.    
+
 - **Population** changes of all countries over time:  
 ```{r, echo = FALSE, warning = FALSE}
 plot(pop ~ year, gapminder)
