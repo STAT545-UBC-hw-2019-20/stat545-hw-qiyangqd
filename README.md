@@ -19,9 +19,9 @@ This repository is used to store my assignments of STAT 545A. There will be five
 Sorry, I am actually a first-year PhD student in Oceanography, focusing on **marine viruses** and their ecological roles in the oceans. 
 Below are some marine viruses under a microscope. Super cool, aren't they?
 
-<img width="370" src="https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-qiyangqd/blob/master/images/BsV%20virion.png">
+<img width="370" src="https://github.com/qiyangqd/STAT545-participation/blob/master/images/BsV%20virion.png">
 
 In order to show the distribution and diversity of viruses in the sea, I am going to use **R packages**, which I have just started learning. I hope that I can generate figures as follows by using R, which is even cooler!   
 *(Figures are from [Christoph et al 2018](https://elifesciences.org/articles/33014))*
 
-<img width="480" src="https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-qiyangqd/blob/master/images/PDM.png">
+<img width="480" src="https://github.com/qiyangqd/STAT545-participation/blob/master/images/PDM.png">
