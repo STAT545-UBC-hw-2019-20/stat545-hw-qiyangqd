@@ -104,8 +104,6 @@ gapminder %>%
 
 ### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe
 
-    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
-
 ![](hw_02_ggplot_gapminder_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ### 3.2 Bar plot: GDP per capita vs. year in each continent

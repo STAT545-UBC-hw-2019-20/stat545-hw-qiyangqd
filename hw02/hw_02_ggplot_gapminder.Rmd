@@ -63,7 +63,7 @@ gapminder %>%
 
 ## Exercise 3
 ### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe
-```{r, warning = FALSE, echo = FALSE}
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
 ggplot(subset(gapminder,continent %in% c("Africa" , "Europe")),
        aes(pop/1000000, lifeExp, color=continent)) + 
   geom_point() +
