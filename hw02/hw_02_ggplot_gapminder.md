@@ -3,7 +3,7 @@ hw\_02\_ggplot\_gapminder
 Qi Yang
 2019/9/23
 
-## Exercise 1
+## Exercise 1: Basic `dplyr`
 
 ### 1.1 Subseting gapminder to three countries in the 1970’s with `filter()`.
 
@@ -94,18 +94,18 @@ gapminder %>%
     ## 10       36181. Iceland         
     ## # ... with 132 more rows
 
-### 1.5 Scatter plot: Canada’s life expectancy vs. GDP per capita
+### 1.5 Scatter plot: Canada’s life expectancy vs. GDP per capita.
 
 ![](hw_02_ggplot_gapminder_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-## Exercise 2
+## Exercise 2: Explore individual variables with `dplyr`
 
-## Exercise 3
+## Exercise 3: Explore various plot types
 
-### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe
+### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe.
 
 ![](hw_02_ggplot_gapminder_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-### 3.2 Bar plot: GDP per capita vs. year in each continent
+### 3.2 Bar plot: GDP per capita vs. year in each continent.
 
 ![](hw_02_ggplot_gapminder_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->

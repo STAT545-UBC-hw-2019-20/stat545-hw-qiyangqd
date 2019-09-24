@@ -16,7 +16,7 @@ library(tidyverse)
 library(gapminder)
 ```
 
-## Exercise 1
+## Exercise 1: Basic `dplyr`
 ### 1.1 Subseting gapminder to three countries in the 1970’s with `filter()`.
 ```{r, warning = FALSE}
 gapminder %>%
@@ -47,7 +47,7 @@ gapminder %>%
   select(gdpPercapMax, country) %>% 
   arrange(desc(gdpPercapMax))
 ```
-### 1.5 Scatter plot: Canada’s life expectancy vs. GDP per capita
+### 1.5 Scatter plot: Canada’s life expectancy vs. GDP per capita.
 ```{r, echo = FALSE, warning = FALSE}
 gapminder %>% 
   filter(country == "Canada") %>% {
@@ -59,10 +59,10 @@ gapminder %>%
   }
 ```
 
-## Exercise 2
+## Exercise 2: Explore individual variables with `dplyr`
 
-## Exercise 3
-### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe
+## Exercise 3: Explore various plot types
+### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe.
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
 ggplot(subset(gapminder,continent %in% c("Africa" , "Europe")),
        aes(pop/1000000, lifeExp, color=continent)) + 
@@ -74,7 +74,7 @@ ggplot(subset(gapminder,continent %in% c("Africa" , "Europe")),
   scale_color_brewer(palette="Paired", name = "Continent")
 ```  
 
-### 3.2 Bar plot: GDP per capita vs. year in each continent
+### 3.2 Bar plot: GDP per capita vs. year in each continent.
 ```{r, warning = FALSE, echo = FALSE}
 ggplot(gapminder, aes(year, gdpPercap/1000)) +
   geom_bar(stat = "identity", 
