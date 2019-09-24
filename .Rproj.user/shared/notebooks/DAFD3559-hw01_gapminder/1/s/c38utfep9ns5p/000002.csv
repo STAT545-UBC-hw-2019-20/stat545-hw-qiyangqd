@@ -1,3 +1,0 @@
-"0","gapminder$year[which(gapminder$gdpPercap == min(gapminder$gdpPercap[which(gapminder$country == ""Afghanistan"")]))]"
-"2","Error: object 'gapminder' not found
-"
