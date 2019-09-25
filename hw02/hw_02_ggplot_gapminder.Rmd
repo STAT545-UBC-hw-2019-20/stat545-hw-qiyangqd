@@ -3,7 +3,7 @@ title: "hw_02_ggplot_gapminder"
 author: "Qi Yang"
 date: "2019/9/23"
 output: 
-        github_document:
+        html_document:
         keep_md: true
         toc: true
 ---
@@ -32,7 +32,7 @@ gapminder %>%
 ```
 ### 1.3 Adding variable `lifeExpInc` to show filtered entries that have experienced drops in life expectancy with `lag()`.
 ```{r, warning = FALSE}
-gapminder %>% 
+gapminder %>%
   mutate(lifeExpInc = lifeExp-lag(gapminder$lifeExp,1)) %>% 
   filter(lifeExpInc < 0, year != 1952) %>% 
   select(lifeExpInc, everything()) %>% 
@@ -60,7 +60,34 @@ gapminder %>%
 ```
 
 ## Exercise 2: Explore individual variables with `dplyr`
+Categorical variable: **continent**.
+Quantitative variable: *pop**.
+### 2.1 Possible values/range
+**Continent**: 
+Possible values are:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(continent) %>% 
+  unique()
+```
+The total number is:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(continent) %>% 
+  unique() %>% 
+  nrow()
+```
+**pop**:
+The range is:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(pop) %>% 
+  range()
+```
 
+Possible 
+What values are typical? What’s the spread? What’s the distribution? Etc., tailored to the variable at hand.
+Feel free to use summary stats, tables, figures.
 ## Exercise 3: Explore various plot types
 ### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe.
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
