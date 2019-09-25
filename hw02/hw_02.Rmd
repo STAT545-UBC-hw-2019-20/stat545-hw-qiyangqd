@@ -1,9 +1,9 @@
 ---
-title: "hw_02_ggplot_gapminder"
+title: "hw_02"
 author: "Qi Yang"
 date: "2019/9/23"
 output: 
-        html_document:
+        github_document:
         keep_md: true
         toc: true
 ---
@@ -12,6 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r load, echo = FALSE, warning = FALSE, message = FALSE}
+options(scipen = 999) # Force R not to use scientific notation
 library(tidyverse)
 library(gapminder)
 ```
@@ -59,107 +60,128 @@ gapminder %>%
   }
 ```
 
-## Exercise 2: Explore individual variables with `dplyr`
-Categorical variable: **country**.  
-Quantitative variable: **pop**.  
+## Exercise 2: Explore individual variables with `dplyr`  
+- Categorical variable: **country**.      
+- Quantitative variable: **pop** (population).  
 
 ### 2.1 Possible values/range  
-**country**:   
-- The number of different countries is:
+**country**:      
+
+- The number of different countries:
 ```{r, warning = FALSE}
 gapminder %>% 
   select(country) %>% 
   unique() %>% 
   nrow()
 ```
-So there are 142 different possible values. Since the space is limited, let's just see the first and last few rows of it (arranged alphabetically).   
-- The first few values:
+So there are 142 different possible values. Since the space is limited, let's just see the first and last few values (arranged alphabetically). 
+
+- The first few values:  
 ```{r, warning = FALSE}
 gapminder %>% 
   select(country) %>% 
   unique() %>% 
   head()
 ```
-- The last few values:
+- The last few values:  
 ```{r, warning = FALSE}
 gapminder %>% 
   select(country) %>% 
   unique() %>% 
   tail()
 ```
-**pop**:  
-- The range is:
+**pop**:    
+
+- The range:
 ```{r, warning = FALSE}
 gapminder %>% 
   select(pop) %>% 
   range()
 ```
 ### 2.2 Typical values, spread and distribution
-2.2.1 Before we explore the data, we need to know:       
-- Measures of typical values: mostly *mean* or *median*.  
-- Measures of spread: *range*, *quartiles*, *interquartile range*, *variance* and *standard deviation*.  
-- Distribution shows all possible values of data.  
+#### 2.2.1 Before we explore the data, we need to know:   
 
-References can be found here:
-1. [CSBSJU](http://www.physics.csbsju.edu/stats/descriptive2.html)), 
-2. [Australian Bureau of Statistics](https://www.abs.gov.au/websitedbs/a3121120.nsf/home/statistical+language+-+measures+of+spread)
+- Measures of *typical values*: mostly *mean* or *median*.  
+
+- Measures of *spread*: *range* (see 2.1), *quartiles*, *interquartile range*, *variance* and *standard deviation*.   
+
+(These two types of measures above might not apply to a categorical variable, which in our case is **country**, so we will only talk about these measures of **pop**)
+
+- *Distribution*: all possible values of data.  
+
+References:  
+1. [CSBSJU](http://www.physics.csbsju.edu/stats/descriptive2.html)   
+2. [Australian Bureau of  Statistics](https://www.abs.gov.au/websitedbs/a3121120.nsf/home/statistical+language+-+measures+of+spread)  
 3. [Statistics How to](https://www.statisticshowto.datasciencecentral.com/data-distribution/)  
 
-2.2.2 First let's see typical values and spread.
-- The *summary* of pop, which gives us most of the information above.  
+#### 2.2.2 To start, let's see *typical values* and *spread* of **pop**.  
+
+- Summary (*mean*, *median* and *quartiles*):  
 ```{r, warning = FALSE}
 gapminder %>% 
   select(pop) %>% 
   summary(gapminder)
 ```
-- *interquartile range* of pop:  
+- *Interquartile range*:  
 ```{r, warning = FALSE}
-  IQR(gapminder$pop)
+  IQR(gapminder$pop) # Tried to use piping in dplyr but failed, so I wrote in the orginal way.
 ```
-- *variance* of pop:  
+- *Variance*:  
 ```{r, warning = FALSE}
 gapminder %>% 
   select(pop) %>% 
   var()
 ```
-(That is HUGE.)  
-- *standard deviation* of pop:
+(That is HUGE)   
+
+- *Standard deviation*:
 ```{r}
-  sd(gapminder$pop)
+  sd(gapminder$pop) # Tried to use piping in dplyr but failed, so I wrote in the orginal way.
 ```
 
-Let's sum up.  
+- Let's sum up the *typical values* and *spread* of **pop**.   
+
 - Typical values:
 
 | Type  | Value   |
 | ------|---------|
-| mean  | 29601212|
-| median| 7023596 |
+| mean  |29601212|
+| median|7023596 |
 
 - Spread:
 
 | Type  | Value   |
 | ------|---------|
-| range | lowest: 60011 highest: 1318683096|
-| quartiles| Q1:2793664 Q2:7023596 Q3:19585222|
+| range | lowest: 60011   highest: 1318683096|
+| quartiles| Q1:2793664    Q2:7023596    Q3:19585222|
 | interquartile range  | 16791558|
-| variance| 11269499041091670 |
+| variance|11269499041091670 |
 | standard deviation| 106157897|
 
-2.2.3 Next, let's see the distribution.
+#### 2.2.3 Next, let's see the *distribution*.  
+
 **country**:   
 ```{r}
 gapminder %>% 
   select(country) %>% 
   count(country)
 ```
-We can easily tell from the tibble that each country has 12 entries.
-**pop**:
-We might want to use a graph which is easier to see the distribution.
+We can easily tell from the tibble that each country has 12 entries.  
 
+**pop**:   
 
+We might want to use a graph which is easier to see the distribution.  
 
+```{r, warning = FALSE, echo = FALSE}
+gapminder %>% 
+  select(pop) %>% {
+  ggplot(.) + 
+      geom_density(aes(x = pop), alpha = .5, fill = "#1c9099") + 
+      theme_classic() + 
+      scale_x_log10("Population")+
+      scale_y_continuous("Density", expand=c(0,0))}
 
+```
 
 ## Exercise 3: Explore various plot types
 ### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe.
@@ -183,7 +205,7 @@ ggplot(gapminder, aes(year, gdpPercap/1000)) +
   scale_x_continuous("Year") +
   scale_y_continuous("GDP per capita (thousand)", 
                      labels = scales::dollar_format(), 
-                     expand=c(0,0)) +
+                     expand=c(0,0)) + # make the plot attach to the x-axis
   theme_classic() + 
   scale_fill_brewer(palette = "Set3", name = "Continent")
 ```
