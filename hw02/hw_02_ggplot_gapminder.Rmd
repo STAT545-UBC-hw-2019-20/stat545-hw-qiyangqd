@@ -60,34 +60,56 @@ gapminder %>%
 ```
 
 ## Exercise 2: Explore individual variables with `dplyr`
-Categorical variable: **continent**.
-Quantitative variable: *pop**.
-### 2.1 Possible values/range
-**Continent**: 
-Possible values are:
+Categorical variable: **country**.  
+Quantitative variable: **pop**.  
+
+### 2.1 Possible values/range  
+**country**:   
+- The number of different countries is:
 ```{r, warning = FALSE}
 gapminder %>% 
-  select(continent) %>% 
-  unique()
-```
-The total number is:
-```{r, warning = FALSE}
-gapminder %>% 
-  select(continent) %>% 
+  select(country) %>% 
   unique() %>% 
   nrow()
 ```
-**pop**:
-The range is:
+So there are 142 different values (countries). Since the space is limited, let's just see the first and last few rows of it (arranged alphabetically).   
+- The first few values:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(country) %>% 
+  unique() %>% 
+  head()
+```
+- The last few values:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(country) %>% 
+  unique() %>% 
+  tail()
+```
+**pop**:  
+- The range is:
 ```{r, warning = FALSE}
 gapminder %>% 
   select(pop) %>% 
   range()
 ```
+### 2.2 Typical values, spread and distribution
+- According to Google (one of the pages can be found  [here](http://www.physics.csbsju.edu/stats/descriptive2.html)), typical values can be represented by mean or median.   
+- **Mean** of pop:
+```{r, warning = FALSE}
+gapminder %>% 
+  select(pop) %>% 
+  colMeans()
+```
+- **Median** of pop:
+```{r, warning = FALSE}
+  median(gapminder$pop)
+```
 
-Possible 
-What values are typical? What’s the spread? What’s the distribution? Etc., tailored to the variable at hand.
-Feel free to use summary stats, tables, figures.
+
+
+
 ## Exercise 3: Explore various plot types
 ### 3.1 Scatterplot: Life expectancy vs. population in Africa and Europe.
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
