@@ -466,7 +466,7 @@ Quantitative variable: <strong>pop</strong>.</p>
   unique() %&gt;% 
   nrow()</code></pre>
 <pre><code>## [1] 142</code></pre>
-<p>So there are 142 different values (countries). Since the space is limited, let’s just see the first and last few rows of it (arranged alphabetically).<br />
+<p>So there are 142 different possible values. Since the space is limited, let’s just see the first and last few rows of it (arranged alphabetically).<br />
 - The first few values:</p>
 <pre class="r"><code>gapminder %&gt;% 
   select(country) %&gt;% 
@@ -506,21 +506,111 @@ Quantitative variable: <strong>pop</strong>.</p>
 </div>
 <div id="typical-values-spread-and-distribution" class="section level3">
 <h3>2.2 Typical values, spread and distribution</h3>
+<p>2.2.1 Before we explore the data, we need to know:<br />
+- Measures of typical values: mostly <em>mean</em> or <em>median</em>.<br />
+- Measures of spread: <em>range</em>, <em>quartiles</em>, <em>interquartile range</em>, <em>variance</em> and <em>standard deviation</em>.<br />
+- Distribution shows all possible values of data.</p>
+<p>References can be found here: 1. <a href="http://www.physics.csbsju.edu/stats/descriptive2.html">CSBSJU</a>), 2. <a href="https://www.abs.gov.au/websitedbs/a3121120.nsf/home/statistical+language+-+measures+of+spread">Australian Bureau of Statistics</a> 3. <a href="https://www.statisticshowto.datasciencecentral.com/data-distribution/">Statistics How to</a></p>
+<p>2.2.2 First let’s see typical values and spread. - The <em>summary</em> of pop, which gives us most of the information above.</p>
+<pre class="r"><code>gapminder %&gt;% 
+  select(pop) %&gt;% 
+  summary(gapminder)</code></pre>
+<pre><code>##       pop           
+##  Min.   :6.001e+04  
+##  1st Qu.:2.794e+06  
+##  Median :7.024e+06  
+##  Mean   :2.960e+07  
+##  3rd Qu.:1.959e+07  
+##  Max.   :1.319e+09</code></pre>
 <ul>
-<li>According to Google (one of the pages can be found <a href="http://www.physics.csbsju.edu/stats/descriptive2.html">here</a>), typical values can be represented by mean or median.<br />
-</li>
-<li><strong>Mean</strong> of pop:</li>
+<li><em>interquartile range</em> of pop:</li>
+</ul>
+<pre class="r"><code>  IQR(gapminder$pop)</code></pre>
+<pre><code>## [1] 16791558</code></pre>
+<ul>
+<li><em>variance</em> of pop:</li>
 </ul>
 <pre class="r"><code>gapminder %&gt;% 
   select(pop) %&gt;% 
-  colMeans()</code></pre>
-<pre><code>##      pop 
-## 29601212</code></pre>
+  var()</code></pre>
+<pre><code>##             pop
+## pop 1.12695e+16</code></pre>
+<p>(That is HUGE.)<br />
+- <em>standard deviation</em> of pop:</p>
+<pre class="r"><code>  sd(gapminder$pop)</code></pre>
+<pre><code>## [1] 106157897</code></pre>
+<p>Let’s sum up.<br />
+- Typical values:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mean</td>
+<td>29601212</td>
+</tr>
+<tr class="even">
+<td>median</td>
+<td>7023596</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>Median</strong> of pop:</li>
+<li>Spread:</li>
 </ul>
-<pre class="r"><code>  median(gapminder$pop)</code></pre>
-<pre><code>## [1] 7023596</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>range</td>
+<td>lowest: 60011 highest: 1318683096</td>
+</tr>
+<tr class="even">
+<td>quartiles</td>
+<td>Q1:2793664 Q2:7023596 Q3:19585222</td>
+</tr>
+<tr class="odd">
+<td>interquartile range</td>
+<td>16791558</td>
+</tr>
+<tr class="even">
+<td>variance</td>
+<td>11269499041091670</td>
+</tr>
+<tr class="odd">
+<td>standard deviation</td>
+<td>106157897</td>
+</tr>
+</tbody>
+</table>
+<p>2.2.3 Next, let’s see the distribution. <strong>country</strong>:</p>
+<pre class="r"><code>gapminder %&gt;% 
+  select(country) %&gt;% 
+  count(country)</code></pre>
+<pre><code>## # A tibble: 142 x 2
+##    country         n
+##    &lt;fct&gt;       &lt;int&gt;
+##  1 Afghanistan    12
+##  2 Albania        12
+##  3 Algeria        12
+##  4 Angola         12
+##  5 Argentina      12
+##  6 Australia      12
+##  7 Austria        12
+##  8 Bahrain        12
+##  9 Bangladesh     12
+## 10 Belgium        12
+## # ... with 132 more rows</code></pre>
+<p>We can easily tell from the tibble that each country has 12 entries. <strong>pop</strong>: We might want to use a graph which is easier to see the distribution.</p>
 </div>
 </div>
 <div id="exercise-3-explore-various-plot-types" class="section level2">

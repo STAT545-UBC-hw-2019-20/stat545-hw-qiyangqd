@@ -72,7 +72,7 @@ gapminder %>%
   unique() %>% 
   nrow()
 ```
-So there are 142 different values (countries). Since the space is limited, let's just see the first and last few rows of it (arranged alphabetically).   
+So there are 142 different possible values. Since the space is limited, let's just see the first and last few rows of it (arranged alphabetically).   
 - The first few values:
 ```{r, warning = FALSE}
 gapminder %>% 
@@ -95,17 +95,68 @@ gapminder %>%
   range()
 ```
 ### 2.2 Typical values, spread and distribution
-- According to Google (one of the pages can be found  [here](http://www.physics.csbsju.edu/stats/descriptive2.html)), typical values can be represented by mean or median.   
-- **Mean** of pop:
+2.2.1 Before we explore the data, we need to know:       
+- Measures of typical values: mostly *mean* or *median*.  
+- Measures of spread: *range*, *quartiles*, *interquartile range*, *variance* and *standard deviation*.  
+- Distribution shows all possible values of data.  
+
+References can be found here:
+1. [CSBSJU](http://www.physics.csbsju.edu/stats/descriptive2.html)), 
+2. [Australian Bureau of Statistics](https://www.abs.gov.au/websitedbs/a3121120.nsf/home/statistical+language+-+measures+of+spread)
+3. [Statistics How to](https://www.statisticshowto.datasciencecentral.com/data-distribution/)  
+
+2.2.2 First let's see typical values and spread.
+- The *summary* of pop, which gives us most of the information above.  
 ```{r, warning = FALSE}
 gapminder %>% 
   select(pop) %>% 
-  colMeans()
+  summary(gapminder)
 ```
-- **Median** of pop:
+- *interquartile range* of pop:  
 ```{r, warning = FALSE}
-  median(gapminder$pop)
+  IQR(gapminder$pop)
 ```
+- *variance* of pop:  
+```{r, warning = FALSE}
+gapminder %>% 
+  select(pop) %>% 
+  var()
+```
+(That is HUGE.)  
+- *standard deviation* of pop:
+```{r}
+  sd(gapminder$pop)
+```
+
+Let's sum up.  
+- Typical values:
+
+| Type  | Value   |
+| ------|---------|
+| mean  | 29601212|
+| median| 7023596 |
+
+- Spread:
+
+| Type  | Value   |
+| ------|---------|
+| range | lowest: 60011 highest: 1318683096|
+| quartiles| Q1:2793664 Q2:7023596 Q3:19585222|
+| interquartile range  | 16791558|
+| variance| 11269499041091670 |
+| standard deviation| 106157897|
+
+2.2.3 Next, let's see the distribution.
+**country**:   
+```{r}
+gapminder %>% 
+  select(country) %>% 
+  count(country)
+```
+We can easily tell from the tibble that each country has 12 entries.
+**pop**:
+We might want to use a graph which is easier to see the distribution.
+
 
 
 
