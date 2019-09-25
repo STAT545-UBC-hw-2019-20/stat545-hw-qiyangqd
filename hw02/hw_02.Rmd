@@ -210,3 +210,8 @@ ggplot(gapminder, aes(year, gdpPercap/1000)) +
   scale_fill_brewer(palette = "Set3", name = "Continent")
 ```
 
+## Recycling
+The analyst didn't succeed in getting the entire data for Rwanda and Afghanistan. He or she shouldn't have used `c()` function. A right way to do this job is by running the code below.
+```{r}
+filter(gapminder, country == "Rwanda" | country == "Afghanistan")
+```
