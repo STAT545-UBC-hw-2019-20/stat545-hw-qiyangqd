@@ -58,5 +58,21 @@ This plot shows...
 ```{r}
 ggplot()
 ```
+## Task 3:
+### Task Option 5: How is life expectancy changing over time on different continents?
+1. The tibble shows...
+```{r}
+gapminder %>% 
+  group_by(continent,year) %>% 
+  summarize(min = min(lifeExp),
+            mean = mean(lifeExp),
+            max = max(lifeExp)) %>% 
+  DT::datatable()
+  
+```
+2. The plot shows...
+```{r}
+ggplot()
+```
 
 
