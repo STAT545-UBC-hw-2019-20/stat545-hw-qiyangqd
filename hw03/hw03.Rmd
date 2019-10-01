@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load, echo = FALSE, warning = FALSE, message = FALSE}
 options(scipen = 999) # Force R not to use scientific notation
 library(tidyverse)
+library(tidyr)
 library(gapminder)
 library(DT)
 ```
@@ -22,7 +23,6 @@ library(DT)
 ```{r, warning = FALSE}
 gapminder %>% 
   group_by(continent) %>% 
-  filter(gdpPercap == max(gdpPercap)) %>% 
   summarize(max = max(gdpPercap),
             country_max = country[gdpPercap == max],
             year_max = year[gdpPercap == max],
@@ -34,29 +34,27 @@ DT::datatable()
 
 This tibble shows the maximum and minimum GDP per capita, corresponding countries and years in each continent. We can see Europe had the maximum GDP per capita of the whole world in 2007, when Norway reached 49357.19017. Africa had the minimum GDP per capita across the globe in 2002, when Congo, Dem. Rep. achieved only 241.1658765. 
 
-2. Plot
-This plot shows...
+2. Plot       
+
 ```{r}
 gapminder %>% 
   group_by(continent) %>% 
-  filter(gdpPercap == max(gdpPercap) | gdpPercap == min(gdpPercap)) %>% 
-  select(continent, country, gdpPercap, year) %>% 
-  arrange(continent, gdpPercap) %>% 
-#???how do I add a column specifying max or min, in order to plot?
-DT::datatable()
-```
+  summarize(Max = max(gdpPercap),
+            Min = min(gdpPercap),
+            Max_forPlot = max(gdpPercap)) %>% # create a column for reordering bars in the plot below
+  pivot_longer(cols      = c(Max, Min),
+               names_to  = "Max_or_Min",
+               values_to = "gdpPercap") %>% 
+  ggplot(aes(x= reorder(continent, Max_forPlot), gdpPercap)) +
+    geom_bar(stat = "identity", aes(fill = Max_or_Min), position = "dodge")+
+     scale_y_log10("GDP per capita", labels = scales::dollar_format())+
+     scale_x_discrete("Continent") +
+     theme_light()+
+     scale_fill_brewer(palette = "Paired", name = "GDP per capita")
+```  
 
-```{r}
-# trying
-continent_lifeExp <- gapminder %>% 
-         group_by(continent) %>% 
-         summarize(max = max(gdpPercap),
-                   min = min(gdpPercap))
-# trying
-# continent_lifeExp %>%   
-#  ggplot(aes(continent, gdpPercap)) +
-#  geom_bar(stat = "identity", position = "dodge")
-```
+This plot shows the maximum and minimum GDP per capita of each continent. We can easily see that the order of continents with GDP per capita from low to high is: Africa, Oceania, Americas, Europe, Asia. It is also interesting to see that Oceania tends to have the samllest gap between the highest and the lowest GDP per capita, while Asia has the biggest gap.
+
 
 ## Task 2:
 ### Task Option 3: Look at the spread of GDP per capita within the continents.
