@@ -1,0 +1,32 @@
+---
+title: "hw_03"
+author: "Qi Yang"
+date: "2019/9/30"
+output: 
+        html_document:
+        toc: TRUE
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r load, echo = FALSE, warning = FALSE, message = FALSE}
+options(scipen = 999) # Force R not to use scientific notation
+library(tidyverse)
+library(gapminder)
+library(DT)
+```
+
+## Task 1: 
+### Task Option 2: Get the maximum and minimum of GDP per capita for all continents.
+```{r, warning = FALSE}
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(max_gdpPercap = max(gdpPercap),
+            country_max_gdpPercap = country[gdpPercap == max_gdpPercap],
+            year_max_gdpPercap = year[gdpPercap == max_gdpPercap],
+            min_gdpPercap = min(gdpPercap),
+            country_min_gdpPercap= country[gdpPercap == min_gdpPercap],
+            year_min_gdpPercap = year[gdpPercap == min_gdpPercap],) %>% 
+DT::datatable()
+```
+
