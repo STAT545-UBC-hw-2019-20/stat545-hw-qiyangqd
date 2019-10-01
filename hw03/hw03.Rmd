@@ -17,22 +17,22 @@ library(gapminder)
 library(DT)
 ```
 
-## Task 1: 
-### Task Option 2: Get the maximum and minimum of GDP per capita for all continents.
+## 1.Task Option 2
+#### Requirement: Get the maximum and minimum of GDP per capita for all continents.
 1. Tibble  
 ```{r, warning = FALSE}
 gapminder %>% 
   group_by(continent) %>% 
-  summarize(max = max(gdpPercap),
-            country_max = country[gdpPercap == max],
-            year_max = year[gdpPercap == max],
-            min = min(gdpPercap),
-            country_min= country[gdpPercap == min],
-            year_min = year[gdpPercap == min],) %>% 
+  summarize(Max = max(gdpPercap),
+            Country_max = country[gdpPercap == Max],
+            Year_max = year[gdpPercap == Max],
+            Min = min(gdpPercap),
+            Country_min= country[gdpPercap == Min],
+            Year_min = year[gdpPercap == Min],) %>% 
+  rename(Continent = continent) %>% 
 DT::datatable()
 ```
-
-This tibble shows the maximum and minimum GDP per capita, corresponding countries and years in each continent. We can see Europe had the maximum GDP per capita of the whole world in 2007, when Norway reached 49357.19017. Africa had the minimum GDP per capita across the globe in 2002, when Congo, Dem. Rep. achieved only 241.1658765. 
+This tibble shows the **maximum** and **minimum GDP per capita**, corresponding **countries** and **years** in each continent. We can see *Europe* had the maximum GDP per capita of the whole world in 2007, when Norway reached 49357.19017. *Africa* had the minimum GDP per capita across the globe in 2002, when Congo, Dem. Rep. achieved only 241.1658765. 
 
 2. Plot       
 
@@ -53,45 +53,58 @@ gapminder %>%
      scale_fill_brewer(palette = "Paired", name = "GDP per capita")
 ```  
 
-This plot shows the maximum and minimum GDP per capita of each continent. We can easily see that the order of continents with GDP per capita from low to high is: Africa, Oceania, Americas, Europe, Asia. It is also interesting to see that Oceania tends to have the samllest gap between the highest and the lowest GDP per capita, while Asia has the biggest gap.
+This plot shows the **maximum** and **minimum GDP per capit**a of each **continent**. We can easily see that the order of continents with GDP per capita from low to high is: *Africa, Oceania, Americas, Europe, Asia*. It is also interesting to see that *Oceania* tends to have the smallest gap between the highest and the lowest GDP per capita, while *Asia* has the biggest gap.
 
 
-## Task 2:
-### Task Option 3: Look at the spread of GDP per capita within the continents.
-1. Spread should include *range*, *quartiles*, *interquartile range*, *variance* and *standard deviation*. This tibble shows...
+## 2.Task Option 3
+#### Requirement: Look at the spread of GDP per capita within the continents.
+1. Tibble
 ```{r}
 gapminder %>% 
   group_by(continent) %>%
-  summarize(range = paste(min(gdpPercap), max(gdpPercap), sep = " ~ "),
+  summarize(Range = paste(min(gdpPercap), max(gdpPercap), sep = " ~ "),
             Q1 = quantile(gdpPercap,0.25),
             Q2 = quantile(gdpPercap,0.5),
             Q3 = quantile(gdpPercap,0.75),
             IQR = IQR(gdpPercap),
             VAR = var(gdpPercap),
             SD = sd(gdpPercap)) %>% 
+  rename(Continent = continent) %>% 
   DT::datatable()
 ```
+This tibble shows the **spread** of **GDP per capita** within the continents, which includes **range**, **quartiles (Q1, Q2, Q3)**, **interquartile range (IQR)**, **variance (VAR)** and **standard deviation (SD)**. Take *Africa* as an example: it has the smallest IQR and SD, indicating that the GDP per capita of African countries are closer to the mean value than other continents. The tibble is very detailed and accurate, but we still need a plot (below) to get direct information about the distribution of GDP per capita.
+
 2. Plot  
-This plot shows...
+
 ```{r}
 ggplot(gapminder, aes(gdpPercap, color = continent)) +
-  geom_line(stat = "density") +
-  scale_x_log10(labels = scales::comma_format()) # how to make the scale of y-axis the same?
-
+  geom_line(stat = "density", size = 0.8) +
+  scale_x_log10("GDP per capita", labels = scales::comma_format())+
+  scale_y_continuous("Density")+
+  theme_light()+
+  scale_color_brewer(palette="Set1", name = "Continent")
 ```
-## Task 3:
-### Task Option 5: How is life expectancy changing over time on different continents?
-1. The tibble shows...
+
+This plot shows the **distribution** of **GDP per capita** for each continent. We can directly tell that *Oceania* seem to have more "concentrated" and higher values, while the values for *Asia* tend to be lower and spread further. 
+
+
+## 3.Task Option 5
+#### Requirement: How is life expectancy changing over time on different continents?
+1. Tibble
 ```{r}
 gapminder %>% 
   group_by(continent,year) %>% 
-  summarize(min = min(lifeExp),
-            mean = mean(lifeExp),
-            max = max(lifeExp)) %>% 
+  summarize(Min = min(lifeExp),
+            Mean = mean(lifeExp),
+            Max = max(lifeExp)) %>% 
+  rename(Continent = continent,
+         Year = year) %>% 
   DT::datatable()
   
 ```
-2. The plot shows...
+This tibble shows how the **minimum, mean** and **maximum** values of **life expectancy** has changed over **time** on each continent. There is a bunch of data, and we may guess that life expectancy goes up with time generally across the globe. To see the trend more clearly and quickly, we can use the plot below.
+
+2. Plot
 ```{r}
 gapminder %>% 
   group_by(continent, year) %>% 
@@ -100,7 +113,12 @@ gapminder %>%
             max = max(lifeExp)) %>% 
   ggplot(aes(year, mean, colour = continent)) +
   geom_line()+
-  geom_point()
+  geom_point()+
+  scale_x_continuous("Year")+
+  scale_y_continuous("Mean of life expectancy")+
+  theme_light()+
+  scale_color_brewer(palette="Paired", name = "Continent")
 ```
 
+The plot shows how the **mean** value of **life expectancy** of each continent changes over **time**, supporting our guess that people tend to live longer with time going on. However, in the case of *Africa*, life expectancy dropped from 1990 to 2005. We can also see that the growing speed was not the same for different continents and in different times, for instance, the value for *Oceania* grew slowly from 1960 to 1970.
 
