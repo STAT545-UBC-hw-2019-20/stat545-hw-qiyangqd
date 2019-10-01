@@ -18,6 +18,8 @@ library(DT)
 
 ## Task 1: 
 ### Task Option 2: Get the maximum and minimum of GDP per capita for all continents.
+1. Tibble    
+This tibble shows...
 ```{r, warning = FALSE}
 gapminder %>% 
   group_by(continent) %>% 
@@ -27,6 +29,34 @@ gapminder %>%
             min_gdpPercap = min(gdpPercap),
             country_min_gdpPercap= country[gdpPercap == min_gdpPercap],
             year_min_gdpPercap = year[gdpPercap == min_gdpPercap],) %>% 
+
 DT::datatable()
 ```
+2. Plot
+This plot shows...
+```{r}
+ggplot()
+```
+
+## Task 2:
+### Task Option 3: Look at the spread of GDP per capita within the continents.
+1. Spread should include *range*, *quartiles*, *interquartile range*, *variance* and *standard deviation*. This tibble shows...
+```{r}
+gapminder %>% 
+  group_by(continent) %>%
+  summarize(range = paste(min(gdpPercap), max(gdpPercap), sep = " ~ "),
+            Q1 = quantile(gdpPercap,0.25),
+            Q2 = quantile(gdpPercap,0.5),
+            Q3 = quantile(gdpPercap,0.75),
+            IQR = IQR(gdpPercap),
+            VAR = var(gdpPercap),
+            SD = sd(gdpPercap)) %>% 
+  DT::datatable()
+```
+2. Plot  
+This plot shows...
+```{r}
+ggplot()
+```
+
 
