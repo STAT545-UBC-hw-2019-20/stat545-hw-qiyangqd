@@ -18,24 +18,44 @@ library(DT)
 
 ## Task 1: 
 ### Task Option 2: Get the maximum and minimum of GDP per capita for all continents.
-1. Tibble    
-This tibble shows...
+1. Tibble  
 ```{r, warning = FALSE}
 gapminder %>% 
   group_by(continent) %>% 
-  summarize(max_gdpPercap = max(gdpPercap),
-            country_max_gdpPercap = country[gdpPercap == max_gdpPercap],
-            year_max_gdpPercap = year[gdpPercap == max_gdpPercap],
-            min_gdpPercap = min(gdpPercap),
-            country_min_gdpPercap= country[gdpPercap == min_gdpPercap],
-            year_min_gdpPercap = year[gdpPercap == min_gdpPercap],) %>% 
-
+  filter(gdpPercap == max(gdpPercap)) %>% 
+  summarize(max = max(gdpPercap),
+            country_max = country[gdpPercap == max],
+            year_max = year[gdpPercap == max],
+            min = min(gdpPercap),
+            country_min= country[gdpPercap == min],
+            year_min = year[gdpPercap == min],) %>% 
 DT::datatable()
 ```
+
+This tibble shows the maximum and minimum GDP per capita, corresponding countries and years in each continent. We can see Europe had the maximum GDP per capita of the whole world in 2007, when Norway reached 49357.19017. Africa had the minimum GDP per capita across the globe in 2002, when Congo, Dem. Rep. achieved only 241.1658765. 
+
 2. Plot
 This plot shows...
 ```{r}
-ggplot()
+gapminder %>% 
+  group_by(continent) %>% 
+  filter(gdpPercap == max(gdpPercap) | gdpPercap == min(gdpPercap)) %>% 
+  select(continent, country, gdpPercap, year) %>% 
+  arrange(continent, gdpPercap) %>% 
+#???how do I add a column specifying max or min, in order to plot?
+DT::datatable()
+```
+
+```{r}
+# trying
+continent_lifeExp <- gapminder %>% 
+         group_by(continent) %>% 
+         summarize(max = max(gdpPercap),
+                   min = min(gdpPercap))
+# trying
+# continent_lifeExp %>%   
+#  ggplot(aes(continent, gdpPercap)) +
+#  geom_bar(stat = "identity", position = "dodge")
 ```
 
 ## Task 2:
@@ -56,7 +76,10 @@ gapminder %>%
 2. Plot  
 This plot shows...
 ```{r}
-ggplot()
+ggplot(gapminder, aes(gdpPercap, color = continent)) +
+  geom_line(stat = "density") +
+  scale_x_log10(labels = scales::comma_format()) # how to make the scale of y-axis the same?
+
 ```
 ## Task 3:
 ### Task Option 5: How is life expectancy changing over time on different continents?
@@ -72,7 +95,14 @@ gapminder %>%
 ```
 2. The plot shows...
 ```{r}
-ggplot()
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(min = min(lifeExp),
+            mean = mean(lifeExp),
+            max = max(lifeExp)) %>% 
+  ggplot(aes(year, mean, colour = continent)) +
+  geom_line()+
+  geom_point()
 ```
 
 
