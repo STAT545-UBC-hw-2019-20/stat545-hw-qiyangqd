@@ -4,17 +4,25 @@ author: "Qi Yang"
 date: "2019/9/30"
 output: 
         html_document:
-        toc: TRUE
+        css: two_columns.css
+
 ---
+<style type="text/css">
+.twoC {width: 100%}
+.clearer {clear: both}
+.twoC .table {max-width: 50%; float: right}
+.twoC img {max-width: 50%; float: left}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-```{r load, echo = FALSE, warning = FALSE, message = FALSE}
-options(scipen = 999) # Force R not to use scientific notation
+```{r load, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(tidyr)
 library(gapminder)
 library(DT)
+library(tsibble)
 ```
 
 ## 1.Task Option 2
@@ -122,3 +130,37 @@ gapminder %>%
 
 The plot shows how the **mean** value of **life expectancy** of each continent changes over **time**, supporting our guess that people tend to live longer with time going on. However, in the case of *Africa*, life expectancy dropped from 1990 to 2005. We can also see that the growing speed was not the same for different continents and in different times, for instance, the value for *Oceania* grew slowly from 1960 to 1970.
 
+## Optional Exercise
+#### Requirement: Get table and figure side-by-side.
+My tibbles above seem to be too wide to achieve this task, so I just modified the tibble from Task Option 2 and the corresponding plot as an example).
+
+<div class="twoC">
+```{r results = 'asis', echo=FALSE}
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(Max = max(gdpPercap),
+            Year_max = year[gdpPercap == Max],
+            Min = min(gdpPercap),
+            Year_min = year[gdpPercap == Min],) %>% 
+  rename(Continent = continent) %>% 
+knitr::kable()
+```
+
+```{r, echo = FALSE}
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(Max = max(gdpPercap),
+            Min = min(gdpPercap),
+            Max_forPlot = max(gdpPercap)) %>% # create a column for reordering bars in the plot below
+  pivot_longer(cols      = c(Max, Min),
+               names_to  = "Max_or_Min",
+               values_to = "gdpPercap") %>% 
+  ggplot(aes(x= reorder(continent, Max_forPlot), gdpPercap)) +
+    geom_bar(stat = "identity", aes(fill = Max_or_Min), position = "dodge")+
+     scale_y_log10("GDP per capita", labels = scales::dollar_format())+
+     scale_x_discrete("Continent") +
+     theme_light()+
+     scale_fill_brewer(palette = "Paired", name = "GDP per capita")
+```  
+</div>
+<div class="clearer"></div>
