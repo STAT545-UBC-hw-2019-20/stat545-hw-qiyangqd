@@ -49,10 +49,10 @@ gapminder %>%
   summarize(Max = max(gdpPercap),
             Min = min(gdpPercap),
             Max_forPlot = max(gdpPercap)) %>% # create a column for reordering bars in the plot below
-  pivot_longer(cols      = c(Max, Min),
+  pivot_longer(cols      = c(Max, Min), # using the code we learned today
                names_to  = "Max_or_Min",
                values_to = "gdpPercap") %>% 
-  ggplot(aes(x= reorder(continent, Max_forPlot), gdpPercap)) +
+  ggplot(aes(x= reorder(continent, -Max_forPlot), gdpPercap)) +
     geom_bar(stat = "identity", aes(fill = Max_or_Min), position = "dodge")+
      scale_y_log10("GDP per capita", labels = scales::dollar_format())+
      scale_x_discrete("Continent") +
@@ -60,7 +60,7 @@ gapminder %>%
      scale_fill_brewer(palette = "Paired", name = "GDP per capita")
 ```  
 
-This plot shows the **maximum** and **minimum GDP per capit**a of each **continent**. We can easily see that the order of continents with GDP per capita from low to high is: *Africa, Oceania, Americas, Europe, Asia*. It is also interesting to see that *Oceania* tends to have the smallest gap between the highest and the lowest GDP per capita, while *Asia* has the biggest gap.
+As a complement to the tibble above, this plot could help us see the comparison between the maximum and minimum GDP per capita in each continent more directly. The maximum GDP per capita of *Asia* is the highest, followed by *Europe, Americas, Oceania*, and *Africa*. In addition, it is interesting to see that *Oceania* tends to have the smallest gap between the highest and the lowest GDP per capita, while *Asia* has the biggest gap.
 
 
 ## 2.Task Option 3
@@ -79,7 +79,7 @@ gapminder %>%
   rename(Continent = continent) %>% 
   DT::datatable()
 ```
-This tibble shows the **spread** of **GDP per capita** within the continents, which includes **range**, **quartiles (Q1, Q2, Q3)**, **interquartile range (IQR)**, **variance (VAR)** and **standard deviation (SD)**. Take *Africa* as an example: it has the smallest IQR and SD, indicating that the GDP per capita of African countries are closer to the mean value than other continents. The tibble is very detailed and accurate, but we still need a plot (below) to get direct information about the distribution of GDP per capita.
+This tibble shows the **spread** of **GDP per capita** within the continents, which includes **range**, **quartiles (Q1, Q2, Q3)**, **interquartile range (IQR)**, **variance (VAR)** and **standard deviation (SD)**. Take *Africa* as an example: it has the smallest IQR and SD, indicating that the GDP per capita of African countries are closer to the mean value than other continents.
 
 2. Plot  
 
@@ -92,7 +92,7 @@ ggplot(gapminder, aes(gdpPercap, color = continent)) +
   scale_color_brewer(palette="Set1", name = "Continent")
 ```
 
-This plot shows the **distribution** of **GDP per capita** for each continent. We can directly tell that *Oceania* seem to have more "concentrated" and higher values, while the values for *Asia* tend to be lower and spread further. 
+In order to complement the tibble above, this plot aims to show directly the **distribution** of **GDP per capita** for each continent. It provides visualization of the data in the tibble above, such as range and IQR. To discuss the plot in a more detailed way, for example, we can easily tell that *Oceania* seems to have more "concentrated" and higher values, while the values for *Asia* tend to be lower and spread further. 
 
 
 ## 3.Task Option 5
@@ -131,7 +131,7 @@ The plot shows how the **mean** value of **life expectancy** of each continent c
 
 ## Optional Exercise
 #### Requirement: Get table and figure side-by-side.
-My tibbles above seem to be too wide to achieve this task, so I just modified the tibble from Task Option 2 and the corresponding plot as an example).
+My tibbles above seem to be too wide to achieve this task, so I just modified the tibble from Task Option 2 and used the corresponding plot.
 
 <div class="twoC">
 ```{r results = 'asis', echo=FALSE}
