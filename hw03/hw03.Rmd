@@ -3,7 +3,7 @@ title: "hw_03"
 author: "Qi Yang"
 output: 
         html_document:
-        css: two_columns.css
+        css: two_columns.css # for optional exercise
 
 ---
 <style type="text/css">
@@ -31,11 +31,11 @@ library(tsibble)
 gapminder %>% 
   group_by(continent) %>% 
   summarize(Max = max(gdpPercap),
-            Country_max = country[gdpPercap == Max],
-            Year_max = year[gdpPercap == Max],
+            Country_max = country[gdpPercap == Max], # The country with the maximum GDP per cap
+            Year_max = year[gdpPercap == Max], # The time when maximum GDP per cap appeared
             Min = min(gdpPercap),
-            Country_min= country[gdpPercap == Min],
-            Year_min = year[gdpPercap == Min],) %>% 
+            Country_min= country[gdpPercap == Min],  # The country with the minimum GDP per cap
+            Year_min = year[gdpPercap == Min],) %>% # The time when minimum GDP per cap appeared
   rename(Continent = continent) %>% 
 DT::datatable()
 ```
@@ -49,15 +49,15 @@ gapminder %>%
   summarize(Max = max(gdpPercap),
             Min = min(gdpPercap),
             Max_forPlot = max(gdpPercap)) %>% # create a column for reordering bars in the plot below
-  pivot_longer(cols      = c(Max, Min), # using the code we learned today
+  pivot_longer(cols      = c(Max, Min), # create a new column specifying whether the value is max or min for plotting
                names_to  = "Max_or_Min",
                values_to = "gdpPercap") %>% 
-  ggplot(aes(x= reorder(continent, -Max_forPlot), gdpPercap)) +
-    geom_bar(stat = "identity", aes(fill = Max_or_Min), position = "dodge")+
-     scale_y_log10("GDP per capita", labels = scales::dollar_format())+
+  ggplot(aes(x= reorder(continent, -Max_forPlot), gdpPercap)) + # reordering, from high to low
+    geom_bar(stat = "identity", aes(fill = Max_or_Min), position = "dodge") + # create two bars for a continent
+     scale_y_log10("GDP per capita", labels = scales::dollar_format())+ 
      scale_x_discrete("Continent") +
      theme_light()+
-     scale_fill_brewer(palette = "Paired", name = "GDP per capita")
+     scale_fill_brewer(palette = "Paired", name = "GDP per capita") # use ColorBrewer to make it prettier
 ```  
 
 As a complement to the tibble above, this plot could help us see the comparison between the maximum and minimum GDP per capita in each continent more directly. The maximum GDP per capita of *Asia* is the highest, followed by *Europe, Americas, Oceania*, and *Africa*. In addition, it is interesting to see that *Oceania* tends to have the smallest gap between the highest and the lowest GDP per capita, while *Asia* has the biggest gap.
@@ -70,12 +70,12 @@ As a complement to the tibble above, this plot could help us see the comparison 
 gapminder %>% 
   group_by(continent) %>%
   summarize(Range = paste(min(gdpPercap), max(gdpPercap), sep = " ~ "),
-            Q1 = quantile(gdpPercap,0.25),
-            Q2 = quantile(gdpPercap,0.5),
-            Q3 = quantile(gdpPercap,0.75),
-            IQR = IQR(gdpPercap),
-            VAR = var(gdpPercap),
-            SD = sd(gdpPercap)) %>% 
+            Q1 = quantile(gdpPercap,0.25), # First quantile
+            Q2 = quantile(gdpPercap,0.5), # Second quantile
+            Q3 = quantile(gdpPercap,0.75), # Third quantile
+            IQR = IQR(gdpPercap), # interquartile range
+            VAR = var(gdpPercap), # variance
+            SD = sd(gdpPercap)) %>%  # standard deviation
   rename(Continent = continent) %>% 
   DT::datatable()
 ```
@@ -86,7 +86,7 @@ This tibble shows the **spread** of **GDP per capita** within the continents, wh
 ```{r}
 ggplot(gapminder, aes(gdpPercap, color = continent)) +
   geom_line(stat = "density", size = 0.8) +
-  scale_x_log10("GDP per capita", labels = scales::comma_format())+
+  scale_x_log10("GDP per capita", labels = scales::dollar_format(), )+
   scale_y_continuous("Density")+
   theme_light()+
   scale_color_brewer(palette="Set1", name = "Continent")
