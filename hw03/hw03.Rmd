@@ -1,7 +1,6 @@
 ---
 title: "hw_03"
 author: "Qi Yang"
-date: "2019/9/30"
 output: 
         html_document:
         css: two_columns.css
