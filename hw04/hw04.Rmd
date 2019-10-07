@@ -24,10 +24,10 @@ lifeExp_comp <- gapminder %>%  # Create new dataset: lifeExp_comp
   filter(country == "Central African Republic" | country == "Japan") # Choose two countries we are interested in
   
 lifeExp_comp_wider <- lifeExp_comp %>%  # Put data in wider format
-                        pivot_wider(id_col = year,  # Pivot to create new columns for each country
-                        names_from = country,
-                        values_from = lifeExp) %>% 
-                        rename(LifeExp_CAR = "Central African Republic", LifeExp_Japan = "Japan")
+                      pivot_wider(id_col = year,  # Pivot to create new columns for each country
+                      names_from = country,
+                      values_from = lifeExp) %>% 
+                      rename(lifeExp_CAR = "Central African Republic", lifeExp_Japan = "Japan") # Rename to make the tibble clear
                       DT::datatable(lifeExp_comp_wider, rownames = FALSE)
 ```
 This tibble provides life expectancies of **Central African Republic (CAR)** and **Japan** in different years. These two countries have the *lowest (53.008)* and *highest (84.55)* life expectany respectively in 2019. Although `gapminder` includes data from 1952 ~ 2007 only, it is still meaningful to compare them in the past in order to find inspiration for studying their current differences. According to the table above, the life expectancy of Japan was approximately *twice* as high as CAR.
@@ -35,7 +35,7 @@ This tibble provides life expectancies of **Central African Republic (CAR)** and
 ### 2. Use the new data shape to scatterplot life expectancy for one country against that of another.
 ```{r}
 lifeExp_comp_wider %>% 
-  ggplot(aes(LifeExp_CAR, LifeExp_Japan)) + 
+  ggplot(aes(lifeExp_CAR, lifeExp_Japan)) + 
   geom_point()+
   labs(x = "Life expectancy of Central African Republic",
        y = "Life expectancy of Japan")+
@@ -49,7 +49,7 @@ The scatterplot shows the life expectancy of Japan vs. CAR. We can see huge diff
 
 ```{r}
 lifeExp_comp_wider %>%  # Re-lengthen the wider data to the original one
-   rename("Central African Republic" = "LifeExp_CAR", "Japan" = "LifeExp_Japan") %>% 
+   rename("Central African Republic" = "lifeExp_CAR", "Japan" = "lifeExp_Japan") %>% 
    pivot_longer(cols = c(-year),
                names_to = "country",
                values_to = "lifeExp") %>% 
@@ -57,7 +57,38 @@ lifeExp_comp_wider %>%  # Re-lengthen the wider data to the original one
    DT::datatable()
 ```
 
-## Exercise 2: Multivariate Data Reshaping
+## Exercise 2: Multivariate Data Reshaping - Option 1
+### 1. Make a tibble with one row per year, and columns for life expectancy and GDP per capita for two countries.
+
+```{r}
+lifeGDP <- gapminder %>%  # Create new dataset: lifeGDP
+  select(year, country, lifeExp, gdpPercap) %>%  # Select columns needed by lifeExp_comp
+  filter(country == "Central African Republic" | country == "Japan") # Choose two countries we are interested in
+
+lifeGDP_wider <- lifeGDP %>% 
+    pivot_wider(id_cols     = c(year), 
+                names_from  = c(country), 
+                names_sep   = "_", 
+                values_from = c(lifeExp, gdpPercap) ) %>% 
+  rename(lifeExp_CAR = "lifeExp_Central African Republic", gdpPercap_CAR = "gdpPercap_Central African Republic") 
+                                                    # Rename to make the tibble nicer
+DT::datatable(lifeGDP_wider)
+```
+This time I still chose Central African Republic (CAR) and Japan. This tibble shows the life expectancy and GDP per capita of these two countries across years. We can see tremendous gaps between them: e.g. In 1997, Japan's GDP per capita was almost 40 times higher than CAR! Japanese also lived twice as long as people in CAR, indicated by the life expectancy values.
+
+### 2. Re-lengthen the data.
+
+```{r}
+lifeGDP_wider %>% 
+  rename("lifeExp_Central African Republic" = "lifeExp_CAR", "gdpPercap_Central African Republic" = "gdpPercap_CAR") %>% 
+                                                                              # Give their original names back to columns
+    pivot_longer(cols      = c(-year), 
+               names_to  = c(".value", "country"),
+               names_sep = "_") %>% 
+  arrange(country) 
+  
+```
+
 
 ## Exercise 3: Table Joins
 ### 3.1 Add a column for email address for each guest in the guestlist.
