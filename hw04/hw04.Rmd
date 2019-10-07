@@ -1,0 +1,50 @@
+---
+title: "hw04"
+author: "Qi Yang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r load, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(tidyr)
+library(gapminder)
+library(DT)
+guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
+email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+```
+
+## Exercise 1: Univariate Data Reshaping
+
+## Exercise 2: Multivariate Data Reshaping
+
+## Exercise 3: Table Joins
+### 3.1 Add a column for email address for each guest in the guestlist.
+
+```{r}
+email_separate <- email %>% 
+                  separate_rows(guest, sep = ", ") %>% # let emails separated for each person
+                  rename(name = guest) # rename for table joining
+guest %>% 
+   left_join(email_separate, by = c("name")) %>% # add email for each person in guest dataset 
+   DT::datatable(rownames = FALSE)
+```
+
+### 3.2 Show people we have emails for yet are not on the guestlist.
+
+```{r}
+email_separate %>% 
+  anti_join(guest, by = c("name")) %>% 
+  DT::datatable(rownames = FALSE)
+```
+
+### 3.3 Guestlist that includes everyone we have emails for.
+
+```{r}
+guest %>% 
+  full_join(email_separate, by = c("name")) %>% 
+  DT::datatable(rownames = FALSE)
+```
+
