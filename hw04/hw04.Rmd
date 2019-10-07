@@ -16,7 +16,46 @@ guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/maste
 email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
 ```
 
-## Exercise 1: Univariate Data Reshaping
+## Exercise 1: Univariate Data Reshaping - Option 1
+### 1. Produce a tibble with one row per year, and columns for life expectancy for two or more countries.
+```{r}
+lifeExp_comp <- gapminder %>%  # Create new dataset: lifeExp_comp
+  select(year, country, lifeExp) %>%  # Select columns needed by lifeExp_comp
+  filter(country == "Central African Republic" | country == "Japan") # Choose two countries we are interested in
+  
+lifeExp_comp_wider <- lifeExp_comp %>%  # Put data in wider format
+                        pivot_wider(id_col = year,  # Pivot to create new columns for each country
+                        names_from = country,
+                        values_from = lifeExp) %>% 
+                        rename(LifeExp_CAR = "Central African Republic", LifeExp_Japan = "Japan")
+                      DT::datatable(lifeExp_comp_wider, rownames = FALSE)
+```
+This tibble provides life expectancies of **Central African Republic (CAR)** and **Japan** in different years. These two countries have the *lowest (53.008)* and *highest (84.55)* life expectany respectively in 2019. Although `gapminder` includes data from 1952 ~ 2007 only, it is still meaningful to compare them in the past in order to find inspiration for studying their current differences. According to the table above, the life expectancy of Japan was approximately *twice* as high as CAR.
+
+### 2. Use the new data shape to scatterplot life expectancy for one country against that of another.
+```{r}
+lifeExp_comp_wider %>% 
+  ggplot(aes(LifeExp_CAR, LifeExp_Japan)) + 
+  geom_point()+
+  labs(x = "Life expectancy of Central African Republic",
+       y = "Life expectancy of Japan")+
+  theme_classic() +
+  coord_fixed() # make axes on the same scale
+```
+
+The scatterplot shows the life expectancy of Japan vs. CAR. We can see huge differences between their life expectancies more clearly and directly.
+
+### 3. Re-lengthen the data.
+
+```{r}
+lifeExp_comp_wider %>%  # Re-lengthen the wider data to the original one
+   rename("Central African Republic" = "LifeExp_CAR", "Japan" = "LifeExp_Japan") %>% 
+   pivot_longer(cols = c(-year),
+               names_to = "country",
+               values_to = "lifeExp") %>% 
+   arrange(country) %>% 
+   DT::datatable()
+```
 
 ## Exercise 2: Multivariate Data Reshaping
 
