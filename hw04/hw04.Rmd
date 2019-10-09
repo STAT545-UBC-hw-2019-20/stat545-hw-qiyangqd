@@ -86,7 +86,8 @@ lifeGDP_wider %>%
     pivot_longer(cols      = c(-year), 
                names_to  = c(".value", "country"),
                names_sep = "_") %>% 
-    arrange(country) # Arrange rows in the same order as before
+    arrange(country) %>% # Arrange rows in the same order as before
+DT::datatable()
 ```
 
 
