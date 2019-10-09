@@ -19,26 +19,28 @@ email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/maste
 ## Exercise 1: Univariate Data Reshaping - Option 1
 ### 1. Produce a tibble with one row per year, and columns for life expectancy for two or more countries.
 ```{r}
-lifeExp_comp <- gapminder %>%  # Create new dataset: lifeExp_comp
-  select(year, country, lifeExp) %>%  # Not necessary, only for comparison with the result of data re-lengthening below)
-  filter(country == "Central African Republic" | country == "Japan") # Choose two countries we want to compare
-lifeExp_comp_wider <- lifeExp_comp %>%  # Put data in wider format
-                      pivot_wider(id_col = year,  # Pivot to create new columns for each country
+lifeExp_comp <- gapminder %>% 
+  select(year, country, lifeExp) %>%  # Not necessary, saved simply for comparison with data re-lengthening
+  filter(country == "Central African Republic" | country == "Japan")
+lifeExp_comp_wider <- lifeExp_comp %>%  
+                      pivot_wider(id_col = year, 
                       names_from = country,
                       values_from = lifeExp) %>% 
-                      rename(lifeExp_CAR = "Central African Republic", lifeExp_Japan = "Japan") 
-                                                  # Rename to make the tibble clear
+                      rename(lifeExp_CAR = "Central African Republic", lifeExp_Japan = "Japan") %>%  
+                      # Rename to make the tibble nicer
+                      round(digits = 2) # Round digits to 2
 DT::datatable(lifeExp_comp_wider, rownames = FALSE)
 ```
-This tibble provides life expectancies of **Central African Republic (CAR)** and **Japan** in different years. These two countries have the *lowest (53.008)* and *highest (84.55)* life expectany respectively in 2019. Although `gapminder` includes data from 1952 ~ 2007 only, it is still meaningful to compare them in the past in order to find inspiration for studying their current differences. According to the table above, the life expectancy of Japan was approximately *twice* as high as CAR.
+This tibble provides life expectancies of **Central African Republic (CAR)** and **Japan** in different years. They have the *lowest* and *highest* life expectany respectively in 2019, so I chose them for comparison here. We can see that Japanese people live almost *twice* as long as people in CAR across years.
 
 ### 2. Use the new data shape to scatterplot life expectancy for one country against that of another.
 ```{r}
 lifeExp_comp_wider %>% 
-  ggplot(aes(lifeExp_CAR, lifeExp_Japan)) + 
+  ggplot(aes(lifeExp_CAR, lifeExp_Japan, label = year)) + # Add year labels
   geom_point()+
   labs(x = "Life expectancy of Central African Republic",
        y = "Life expectancy of Japan")+
+  geom_text(hjust = 0, nudge_x = -2.1) + # Put year labels at proper places
   theme_classic() +
   coord_fixed() # Make axes on the same scale
 ```
@@ -48,11 +50,12 @@ The scatterplot shows the life expectancy of **Japan** vs. **CAR**. We can see h
 ### 3. Re-lengthen the data.
 
 ```{r}
-lifeExp_comp_wider %>%  # Re-lengthen the wider data to the original one
-   rename("Central African Republic" = "lifeExp_CAR", "Japan" = "lifeExp_Japan") %>% # Give back their original names
+lifeExp_comp_wider %>% 
+   rename("Central African Republic" = "lifeExp_CAR", "Japan" = "lifeExp_Japan") %>% 
+   # Give back their original names
    pivot_longer(cols = c(-year),
                names_to = "country",
-               values_to = "lifeExp") %>% 
+               values_to = "lifeExp") %>% # Re-lengthening 
    arrange(country) %>% # Arrange rows in the same order as before
    DT::datatable()
 ```
@@ -61,31 +64,29 @@ lifeExp_comp_wider %>%  # Re-lengthen the wider data to the original one
 ### 1. Make a tibble with one row per year, and columns for life expectancy and GDP per capita for two countries.
 
 ```{r}
-lifeGDP <- gapminder %>%  # Create new dataset: lifeGDP
+lifeGDP <- gapminder %>%
            select(year, country, lifeExp, gdpPercap) %>% 
-           # Not necessary, only for comparing with the result of data re-lengthening below)
-           filter(country == "Central African Republic" | country == "Japan") # Choose two countries we are interested in
-lifeGDP_wider <- lifeGDP %>% # Put data in a wider format
-                 pivot_wider(id_cols     = c(year), 
+           filter(country == "Central African Republic" | country == "Japan") 
+lifeGDP_wider <- lifeGDP %>% 
+                 pivot_wider(id_cols     = c(year),
                  names_from  = c(country), 
                  names_sep   = "_", 
                  values_from = c(lifeExp, gdpPercap) ) %>% 
-                 rename(lifeExp_CAR = "lifeExp_Central African Republic", gdpPercap_CAR = "gdpPercap_Central African Republic")                  # Rename to make the tibble nicer
+                 round(digits = 2) %>% 
+                 rename(lifeExp_CAR = "lifeExp_Central African Republic", gdpPercap_CAR = "gdpPercap_Central African Republic")
 DT::datatable(lifeGDP_wider)
 ```
-This time I still chose **Central African Republic (CAR)** and **Japan** in order to compare their economic conditions. This tibble shows the life expectancy and GDP per capita of these two countries across years. We can see tremendous gaps between not only life expectancies but also GDP per capita: e.g. In 1997, Japan's GDP per capita was almost *40* times higher than CAR!
+This tibble shows the life expectancy and GDP per capita of **CAR** and **Japan** across years. We can see tremendous gaps between not only life expectancies but also GDP per capita: e.g. In 1997, Japan's GDP per capita was almost *40* times higher than CAR!
 
 ### 2. Re-lengthen the data.
 
 ```{r}
 lifeGDP_wider %>% 
-  rename("lifeExp_Central African Republic" = "lifeExp_CAR", "gdpPercap_Central African Republic" = "gdpPercap_CAR") %>% 
-  # Give back their original names
+    rename("lifeExp_Central African Republic" = "lifeExp_CAR", "gdpPercap_Central African Republic" = "gdpPercap_CAR") %>% 
     pivot_longer(cols      = c(-year), 
                names_to  = c(".value", "country"),
                names_sep = "_") %>% 
-  arrange(country) # Arrange rows in the same order as before
-  
+    arrange(country) # Arrange rows in the same order as before
 ```
 
 
