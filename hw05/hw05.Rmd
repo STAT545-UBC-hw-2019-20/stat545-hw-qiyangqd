@@ -1,0 +1,148 @@
+---
+title: "Homework 05"
+author: "Qi Yang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r load, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(tidyr)
+library(gapminder)
+library(DT)
+library(forcats)
+library(here)
+```
+
+## Exercise 1: Explain the value of the here::here package
+- One value I found about `here::here` before reading the blog is that it is great for people to run others' codes at their own computer. It doesn't use a path that only exist in the creator's computer. 
+- After reading the blog, I found more values about this package.
+
+## Exercise 2: Factor management
+### Elaboration for the gapminder data set
+1. Drop Oceania.
+1) The variables we are going to use are `continent` and `country`. According to the requirement, I need to ensure that they are factors:
+```{r}
+class(gapminder$continent)
+class(gapminder$country)
+```
+They are indeed factors.     
+2) Now I am going to `filter` the gapminder dataset: remove observations associated with the `continent` of Oceania.     
+- Before filtering:    
+```{r}
+nlevels(gapminder$continent)
+levels(gapminder$continent)
+nrow(gapminder)
+```
+There are 5 levels in `continent` and  rows in gapminder.     
+- After filtering:     
+```{r}
+gap_fd_oce <- gapminder %>% 
+              filter(continent != "Oceania")
+nlevels(gap_fd_oce$continent)
+levels(gap_fd_oce$continent)
+nrow(gap_fd_oce)
+```
+Although we did remove some rows of data of Oceania, the level 'Oceania' still exists.
+3) Now I am going to remove Oceania, the unused factor level.
+```{r}
+gap_dp_oce <- gap_fd_oce %>% 
+              droplevels()
+nlevels(gap_dp_oce$continent)
+levels(gap_dp_oce$continent)
+```
+Now the level Oceania has been removed.
+2.Reorder the levels of `country` or `continent`.
+In this task, I am going to use the factor `country`. What I aim to do is to see how GDP (= `gdpPercap`*`pop` in `gapminder`) changes over time (the summary statistic) in the top 5 countries which have the highest GDP in 2019, according to [GDP Ranked by Country 2019](http://worldpopulationreview.com/countries/countries-by-gdp/).   
+1) Create a new dataset: `gapGDP`.
+```{r}
+# choose 5 countries
+top5gdp <- c("United States", "China", "Japan", "Germany", "India")
+# modify gapminder
+gapGDP <- gapminder %>% 
+  mutate(GDP = gdpPercap*pop/1000000000) %>% # create GDP column
+  select(country, GDP, year) %>% # choose variables
+  filter(country %in% top5gdp) %>% 
+  mutate_if(is.numeric, round) # round the digits of GDP
+```
+2) Compare the results of `arrange` on the original and re-leveled factor.  
+- Original:
+```{r}
+gapGDP %>% 
+  DT::datatable()
+```
+We can see the countries are listed alphabetically: China, Germany, India, Japan, United States.     
+- Re-leveled:
+```{r}
+# gapGDP %>% 
+#  group_by(country) %>% 
+#  arrange(.by_group = TRUE, desc(max(GDP)) %>% 
+#  DT::datatable()
+```
+Now the countries are arranged by GDP in 2007 from high to low (I chose 2007 so that the arrangement can correspond to the plot below).     
+
+3) Plot a figure of before/after re-leveling the factor.      
+- Before re-leveling:
+```{r}
+# plotting
+ggplot(gapGDP, aes(x = year, y = GDP,
+                  color = country)) + 
+                        # fct_reorder2 is used for 2 variables
+  geom_line(size = 0.8) +
+  labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
+  theme_bw()
+```
+We can see that the order of countries are not the same in legend and graph. The arrangement is arbitrary and it causes inconvenience. For example, if I want to know which country had the highest GDP in 2007, I have to remeber the color of the line and find the country name with the same color in the legend.     
+- After re-leveling:
+```{r}
+# plotting
+ggplot(gapGDP, aes(x = year, y = GDP,
+                  color = fct_reorder2(country, year, GDP))) + 
+                        # fct_reorder2 is used for 2 variables
+  geom_line(size = 0.8) +
+  labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
+  theme_bw()
+```
+Now the orders of countries are the same in both legend and graph. When looking at the lines, we can move our eyes horizontally to the legend, instead of searching in the legend from top to bottom to find the corresponding country!
+
+## Exercise 3: File input/output (I/O)
+1) Create something new.      
+
+In this task, I want to see the minimum value of life expectancy in different continents in 2007, the most recent year. I checked maximum values at first, but there isn't much difference. Let's see if minimum values will vary.
+```{r}
+gaplifeExp_con <- gapminder %>% 
+                  filter(year == "2007") %>% 
+                  group_by(continent) %>% 
+                  summarise(lifeExpmin = min(lifeExp))
+DT::datatable(gaplifeExp_con)
+```
+2) Export dataset to disk, and reload it back            
+
+- Export:
+```{r}
+write_csv(gaplifeExp_con, here::here("hw05","gaplifeExp_con.csv"))
+```
+- Reload:
+```{r}
+gaplifeExp_con_re <- read_csv(here::here("hw05", "gaplifeExp_con.csv"))
+DT::datatable(gaplifeExp_con_re)
+```
+Comment: I didn't have any difficulty writing to file and then reading it back. I guess it is because I don't have much data in this dataset.     
+3) Order my data with my factor
+I am going to demonstrate the ordering of my data (`gaplifeExp_con_re`) by plots.     
+```{r}
+gaplifeExp_con_re %>%
+  ggplot() +
+  geom_col(aes(x = fct_reorder(continent, lifeExpmin), y = lifeExpmin)) +
+  theme_bw() +
+  labs(x = "Continent", y = "Minimum life expectancy")
+```
+
+We can see from the ordered plot easily that there indeed were differences between minimum values of life expectancy in each continent. The lowest took place in Africa (< 40 years old), and the highest existed in Oceania (> 80 years old).    
+
+## Exercise 4: Visualization design
+
+## Exercise 5: Writing figures to file
+
