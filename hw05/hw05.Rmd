@@ -14,6 +14,7 @@ library(gapminder)
 library(DT)
 library(forcats)
 library(here)
+library(gridExtra)
 ```
 
 ## Exercise 1: Explain the value of the here::here package
@@ -73,44 +74,47 @@ gapGDP <- gapminder %>%
 gapGDP %>% 
   DT::datatable()
 ```
-We can see the countries are listed alphabetically: China, Germany, India, Japan, United States.     
+Countries are listed alphabetically: China, Germany, India, Japan, United States.     
 - Re-leveled:
 ```{r}
-# gapGDP %>% 
-#  group_by(country) %>% 
-#  arrange(.by_group = TRUE, desc(max(GDP)) %>% 
-#  DT::datatable()
+gapGDP %>% 
+  group_by(country) %>% 
+  mutate(maxGDP = max(GDP)) %>% 
+  arrange(desc(maxGDP)) %>% 
+  select(-maxGDP) %>% 
+  DT::datatable()
 ```
-Now the countries are arranged by GDP in 2007 from high to low (I chose 2007 so that the arrangement can correspond to the plot below).     
-
-3) Plot a figure of before/after re-leveling the factor.      
-- Before re-leveling:
+Now the countries are arranged in a descending order of their maximum GDP. I did this so that it is consistent with my after-re-leveling plot below.        
+3) Plot figures of before/after re-leveling the factor.      
 ```{r}
-# plotting
-ggplot(gapGDP, aes(x = year, y = GDP,
+p_befRel <- ggplot(gapGDP, aes(x = year, y = GDP, # plot before re-leveling
                   color = country)) + 
+  geom_line(size = 0.8) +
+  labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
+  theme_bw()
+
+p_aftRel <- ggplot(gapGDP, aes(x = year, y = GDP, # plot after relevling
+                  color = fct_reorder2(country, year, GDP, max))) + 
                         # fct_reorder2 is used for 2 variables
   geom_line(size = 0.8) +
   labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
   theme_bw()
 ```
-We can see that the order of countries are not the same in legend and graph. The arrangement is arbitrary and it causes inconvenience. For example, if I want to know which country had the highest GDP in 2007, I have to remeber the color of the line and find the country name with the same color in the legend.     
-- After re-leveling:
-```{r}
-# plotting
-ggplot(gapGDP, aes(x = year, y = GDP,
-                  color = fct_reorder2(country, year, GDP))) + 
-                        # fct_reorder2 is used for 2 variables
-  geom_line(size = 0.8) +
-  labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
-  theme_bw()
+```{r, fig.height=5, fig.width=10}
+grid.arrange(p_befRel, p_aftRel, ncol = 2, nrow = 1) # side-by-side
 ```
-Now the orders of countries are the same in both legend and graph. When looking at the lines, we can move our eyes horizontally to the legend, instead of searching in the legend from top to bottom to find the corresponding country!
+- Before re-leveling (left):     
+
+It is a little inconvenient to look at the plot. For example, if I want to know which country had the highest GDP, I have to remeber the color of the line and find the country name with the same color in the legend.  
+
+- After re-leveling (right):    
+
+The orders of countries are the same in both legend and graph. When looking at the lines, we can move our eyes horizontally to the legend, instead of searching in the legend from top to bottom to find the corresponding country!
 
 ## Exercise 3: File input/output (I/O)
 1) Create something new.      
 
-In this task, I want to see the minimum value of life expectancy in different continents in 2007, the most recent year. I checked maximum values at first, but there isn't much difference. Let's see if minimum values will vary.
+In this task, I want to see if life expectancies of each continent in the most recent year (2007) varied. I checked maximum values at first, but there isn't much difference. So let's check out minimum values.
 ```{r}
 gaplifeExp_con <- gapminder %>% 
                   filter(year == "2007") %>% 
@@ -129,7 +133,7 @@ write_csv(gaplifeExp_con, here::here("hw05","gaplifeExp_con.csv"))
 gaplifeExp_con_re <- read_csv(here::here("hw05", "gaplifeExp_con.csv"))
 DT::datatable(gaplifeExp_con_re)
 ```
-Comment: I didn't have any difficulty writing to file and then reading it back. I guess it is because I don't have much data in this dataset.     
+Comment: I didn't have any difficulty writing to file and then reading it back. The new file looked just the same as before. I guess it is because the dataset didn't have much data (only 2 columns and 5 rows).     
 3) Order my data with my factor
 I am going to demonstrate the ordering of my data (`gaplifeExp_con_re`) by plots.     
 ```{r}
@@ -139,10 +143,80 @@ gaplifeExp_con_re %>%
   theme_bw() +
   labs(x = "Continent", y = "Minimum life expectancy")
 ```
-
-We can see from the ordered plot easily that there indeed were differences between minimum values of life expectancy in each continent. The lowest took place in Africa (< 40 years old), and the highest existed in Oceania (> 80 years old).    
+The continents are plotted in a ascending order of minimum life expectancy. We can see that there indeed were differences. The lowest life expectancy took place in Africa (< 40 years old), and the highest existed in Oceania (> 80 years old).   
 
 ## Exercise 4: Visualization design
+In this task, I have picked 3 plots I created in my assignment before to modify them.     
+
+1. Changes of life expectancy over time on different continents (Homework03, Task Option 5)
+```{r}
+hw03_old <- gapminder %>% # old plot
+  group_by(continent, year) %>% 
+  summarize(min = min(lifeExp),
+            mean = mean(lifeExp),
+            max = max(lifeExp)) %>% 
+  ggplot(aes(year, mean, colour = continent)) +
+  geom_line()+
+  geom_point()+
+  scale_x_continuous("Year")+
+  scale_y_continuous("Mean of life expectancy")+
+  theme_light()+
+  scale_color_brewer(palette="Paired", name = "Continent")
+
+hw03_new <- gapminder %>% # new plot
+  group_by(continent, year) %>% 
+  summarise(meanlifeExp = mean(lifeExp)) %>% 
+ggplot(aes(year, meanlifeExp,
+                  color = fct_reorder2(continent, year, meanlifeExp))) + 
+  geom_line(size = 0.6) +
+  labs(x = "Year", y = "Mean of life expectancy", color = "Continent") +
+  theme_classic()
+```
+```{r, fig.height=5, fig.width=15}
+grid.arrange(hw03_old, hw03_new, ncol = 2, nrow = 1)
+```
+<center> Changes of life expectancy over time on different continents, old(left) and new (right) </center>
+
+|What I changed|Oldl|New|
+|----|--------|---|
+|factor re-leveling| Orders of continents don't match in lines and legend | Matched!|
+|Color| Colors are not very obvious | easy to differentiate from each other|
+|Background|Grids in graph are kind of distractive|White, lines are easier to be seen|
+|Points|Could be redundant|Removed as the general trend matters most|
+
+2. Changes of GDP per capita in each continent over time (Homework 02, Exercise 2)
+
+```{r}
+hw02_old <- ggplot(gapminder, aes(gdpPercap, color = continent)) +
+  geom_line(stat = "density", size = 0.8) +
+  scale_x_log10("GDP per capita", labels = scales::dollar_format())+
+  scale_y_continuous("Density")+
+  theme_light()+
+  scale_color_brewer(palette="Set1", name = "Continent")
+
+hw02_new <- ggplot(gapminder, aes(gdpPercap, continent) )+
+  ggridges::geom_density_ridges()+
+  theme_classic()+
+  scale_x_continuous("GDP per capita", labels = scales::dollar_format())+
+  scale_y_discrete("Continent")
+```
+```{r, fig.height=5, fig.width=15}
+grid.arrange(hw02_old, hw02_new, ncol = 2, nrow = 1)
+```
+|What I changed|Original|New|
+|----|--------|---|
+|plot type| Kind of messy and hard to pick a continent out to see its density | Continents' density plots separated and easy to be seen|
+|Background|Grids in graph are kind of distractive|White, density plots are easier to be seen|
+|Color|Actually it is fine|Since `continent` becomes the y-axis there is no need for colors: things are simpler and help viewers to concentrate on the shape of each plot|
+
+
+|What I changed|Oldl|New|
+|----|--------|---|
+|plot type| Kind of messy, hard to pick out a continent's density plot| Continents are separated and easy to be seen|
+|Background|Grids in graph are kind of distractive|White, density plots are easier to be seen|
+|x-axis scale|`scale_x_log10` might cause misunderstanding|Default `scale_x_continuous`, prevent misunderstanding |
+|Color|Actually it is fine | As `continent` becomes the y-axis there is no need for colors: the plot becomes simpler and helps viewers to concentrate on the density shape|
+
 
 ## Exercise 5: Writing figures to file
 
