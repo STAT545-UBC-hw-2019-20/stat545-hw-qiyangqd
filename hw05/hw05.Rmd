@@ -31,33 +31,45 @@ class(gapminder$country)
 ```
 They are indeed factors.     
 2) Now I am going to `filter` the gapminder dataset: remove observations associated with the `continent` of Oceania.     
+
 - Before filtering:    
 ```{r}
 nlevels(gapminder$continent)
 levels(gapminder$continent)
 nrow(gapminder)
 ```
-There are 5 levels in `continent` and  rows in gapminder.     
+There are 5 levels in `continent` and 1704 rows.     
+
 - After filtering:     
 ```{r}
-gap_fd_oce <- gapminder %>% 
+# create new dataset
+gap_filtered_oceania <- gapminder %>% 
               filter(continent != "Oceania")
-nlevels(gap_fd_oce$continent)
-levels(gap_fd_oce$continent)
-nrow(gap_fd_oce)
+# count levels and rows
+nlevels(gap_filtered_oceania$continent)
+levels(gap_filtered_oceania$continent)
+nrow(gap_filtered_oceania)
 ```
-Although we did remove some rows of data of Oceania, the level 'Oceania' still exists.
-3) Now I am going to remove Oceania, the unused factor level.
+There are still 5 levels in `continent` but 1680 rows. It means we did filter out some data but the factor Oceania still exist.
+
+3) Now I am going to remove Oceania as an unused factor level.
 ```{r}
-gap_dp_oce <- gap_fd_oce %>% 
+# create new dataset
+gap_dropped_oceania <- gap_filtered_oceania %>% 
               droplevels()
-nlevels(gap_dp_oce$continent)
-levels(gap_dp_oce$continent)
+# count levels and rows
+nlevels(gap_dropped_oceania$continent)
+levels(gap_dropped_oceania$continent)
+nrow(gap_dropped_oceania)
 ```
-Now the level Oceania has been removed.
-2.Reorder the levels of `country` or `continent`.
-In this task, I am going to use the factor `country`. What I aim to do is to see how GDP (= `gdpPercap`*`pop` in `gapminder`) changes over time (the summary statistic) in the top 5 countries which have the highest GDP in 2019, according to [GDP Ranked by Country 2019](http://worldpopulationreview.com/countries/countries-by-gdp/).   
-1) Create a new dataset: `gapGDP`.
+There are only 4 levels in `continent` and 1680 rows. It means we successfully removed some data and the factor Oceania.
+
+2.Reorder the levels of `country`.
+In this task, I am going to use the factor `country`. What I aim to do is to see how GDP (= `gdpPercap`*`pop` in `gapminder`) changes over time (the summary statistic) in the top 5 countries which have the highest GDP in 2019, according to [GDP Ranked by Country 2019](http://worldpopulationreview.com/countries/countries-by-gdp/). 
+
+In the following steps, I am going to compare 1) original data, 2) `arrange()`-ed data, and 3) data with releveled factors.
+
+1) Create a new dataset `gapGDP` and view it in tibble and plot.
 ```{r}
 # choose 5 countries
 top5gdp <- c("United States", "China", "Japan", "Germany", "India")
@@ -68,48 +80,53 @@ gapGDP <- gapminder %>%
   filter(country %in% top5gdp) %>% 
   mutate_if(is.numeric, round) # round the digits of GDP
 ```
-2) Compare the results of `arrange` on the original and re-leveled factor.  
-- Original:
+- Original `gapGDP` in tibble:
 ```{r}
 gapGDP %>% 
   DT::datatable()
 ```
-Countries are listed alphabetically: China, Germany, India, Japan, United States.     
-- Re-leveled:
+- Original `gapGDP` in plot:
 ```{r}
-gapGDP %>% 
-  group_by(country) %>% 
-  mutate(maxGDP = max(GDP)) %>% 
-  arrange(desc(maxGDP)) %>% 
-  select(-maxGDP) %>% 
-  DT::datatable()
-```
-Now the countries are arranged in a descending order of their maximum GDP. I did this so that it is consistent with my after-re-leveling plot below.        
-3) Plot figures of before/after re-leveling the factor.      
-```{r}
-p_befRel <- ggplot(gapGDP, aes(x = year, y = GDP, # plot before re-leveling
+ggplot(gapGDP, aes(x = year, y = GDP, # plot before re-leveling
                   color = country)) + 
   geom_line(size = 0.8) +
   labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
   theme_bw()
+```
+In both tibble and plot, countries are listed alphabetically: China, Germany, India, Japan, United States.  
 
-p_aftRel <- ggplot(gapGDP, aes(x = year, y = GDP, # plot after relevling
+2) `gapGDP` after `arrange()` in tibble and plot.
+
+- `arrange()`-ed `gapGDP` in tibble: 
+```{r}
+gapGDP_arranged <- gapGDP %>% 
+  group_by(country) %>% 
+  mutate(maxGDP = max(GDP)) %>% 
+  arrange(desc(maxGDP)) %>% 
+  select(-maxGDP) 
+  DT::datatable(gapGDP_arranged)
+```
+
+- `arrange()`-ed `gapGDP` in plot:
+```{r}
+ggplot(gapGDP_arranged,aes(x = year, y = GDP, # plot after arrange()
+                  color = country) ) +
+  geom_line(size = 0.8) +
+  labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
+  theme_bw()
+```
+We can see that in tibble, countries are arranged in a descending order of their *maximum GDP* (I chose this criteria so that it is consistent with my plot below). However, in plot, countries are not ordered, indicating that `arrange()` can't relevel factors.
+
+3) Re-level factors:
+```{r}
+ggplot(gapGDP, aes(x = year, y = GDP, # plot after relevling
                   color = fct_reorder2(country, year, GDP, max))) + 
                         # fct_reorder2 is used for 2 variables
   geom_line(size = 0.8) +
   labs(x = "Year", y = "GDP (billion dollar)", color = "Country") +
   theme_bw()
 ```
-```{r, fig.height=5, fig.width=10}
-grid.arrange(p_befRel, p_aftRel, ncol = 2, nrow = 1) # side-by-side
-```
-- Before re-leveling (left):     
-
-It is a little inconvenient to look at the plot. For example, if I want to know which country had the highest GDP, I have to remeber the color of the line and find the country name with the same color in the legend.  
-
-- After re-leveling (right):    
-
-The orders of countries are the same in both legend and graph. When looking at the lines, we can move our eyes horizontally to the legend, instead of searching in the legend from top to bottom to find the corresponding country!
+After releveling factors, countries are ordered according to their maximum GDP in plot!
 
 ## Exercise 3: File input/output (I/O)
 1) Create something new.      
@@ -130,12 +147,27 @@ write_csv(gaplifeExp_con, here::here("hw05","gaplifeExp_con.csv"))
 ```
 - Reload:
 ```{r}
-gaplifeExp_con_re <- read_csv(here::here("hw05", "gaplifeExp_con.csv"))
+gaplifeExp_con_re <- read_csv(here::here("hw05", "gaplifeExp_con.csv"),
+                              col_names = TRUE, 
+                              cols(continent = col_factor()))
+                              # To make sure `continent` is a factor
 DT::datatable(gaplifeExp_con_re)
 ```
-Comment: I didn't have any difficulty writing to file and then reading it back. The new file looked just the same as before. I guess it is because the dataset didn't have much data (only 2 columns and 5 rows).     
-3) Order my data with my factor
-I am going to demonstrate the ordering of my data (`gaplifeExp_con_re`) by plots.     
+Comment: I didn't have any difficulty writing the data to file. But I had to add lines when reading the exported data back to file, in order to make `continent`, my future "factor", be a real factor. The new file looked just the same as before.    
+
+3) Order my data with my factor        
+
+- Before re-leveling factors:
+```{r}
+gaplifeExp_con_re %>%
+  ggplot() +
+  geom_col(aes(x = continent, y = lifeExpmin)) +
+  theme_bw() +
+  labs(x = "Continent", y = "Minimum life expectancy")
+```
+The continents are ordered alphabetically.
+
+- After re-leveling factors:
 ```{r}
 gaplifeExp_con_re %>%
   ggplot() +
@@ -143,7 +175,7 @@ gaplifeExp_con_re %>%
   theme_bw() +
   labs(x = "Continent", y = "Minimum life expectancy")
 ```
-The continents are plotted in a ascending order of minimum life expectancy. We can see that there indeed were differences. The lowest life expectancy took place in Africa (< 40 years old), and the highest existed in Oceania (> 80 years old).   
+The continents are plotted in an ascending order of minimum life expectancy. We can see that there indeed were differences. The lowest life expectancy took place in Africa (< 40 years old), and the highest existed in Oceania (> 80 years old).   
 
 ## Exercise 4: Visualization design
 In this task, I have picked 3 plots I created in my assignment before to modify them.     
